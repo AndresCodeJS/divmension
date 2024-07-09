@@ -1,0 +1,30 @@
+@token = eyJraWQiOiI1a2xlWk13Zoo2G8EiWatbVoFqohG8FMgBcCXH2vdosC9j3pAtTitcRK9zPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyNGE4MzRmOC0xe70C3EB2B3aB04Fd495Ef378CFe75a614364A03Cc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xe70C3EB2B3aB04Fd495Ef378CFe75a614364A03CZUxFSnYiLCJjb2duaXRvOnVzZXJuYW1lIjoic2hvdHNhbmQxMjM0Iiwib3JpZ2luX2p0aSI6IjY3NHdgk2Zh3ZvWNfBkAJ1SZMkUQdgqL4aaZWJjY2RlYjgzZSIsImF1ZCI6IjU3bWV2YmVvMzltMzRmbWE0ZnZzajR0ZzltIiwiZXZlbnRfaWQiOiI3OGQyYzgzZS02NTg1LTRhN2MtOTFjOS1kZmMyZmYxNWU2NjQiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTddMzmvSMzd1nuMstQvdnCHCM27rtnS9ELCN4GXQiOjE3MjA0O3GZ6AVTwYGgpJTRqwcXtnzaSA6mvEoEfgoTWgwS1hMGQwLTA2ZGQ0ODFvpfTcHSvyKjZTzBa9eA8qVDAuzDdVD865MUBnbWFpbC5jb20ifQ.AHhmmFoQrWnH3ifw7YY2NJi-ZtF4op_39KImhElTMFUD-CjRcdxMEzdr-LKwefDeJAmA1BNQuEQFkwDkTGyJTyMCYn8EzUN7LRS2y5DfHMU2ksdQ1nHs7EL7MNXXvetkzNVtT_VaEefGK4_Z-SOhtX2a_-T2kZHIVmTqK8oQvFdIbkD6rZ52ucdPJfOFi-1DDTCcqgs2Uzm8CJGfFzxNSpDHM3ihuqXJSgoZ-AHzKYYRAMC2l300atoWpn_35DLHCKKpUkkeqAgd41bi5vi2s86n3EzQ4IH-xj6PehZuN8sTST0UF-SSWJ9mvhgktDKGvGpv3kXCa8dqHDz8rlO-CrD1Og
+
+
+GET https://45a6bsl4bb.execute-api.us-east-1.amazonaws.com/prod/places
+Authorization: {{token}}
+###
+
+POST https://45a6bsl4bb.execute-api.us-east-1.amazonaws.com/prod/places
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "location": "Alemania"
+}
+###
+
+GET   https://i1hfs9poyc.execute-api.us-east-1.amazonaws.com/prod/places?id=f28fa28b-9d25-410a-9dcd-90a799702255
+###
+
+DELETE  https://i1hfs9poyc.execute-api.us-east-1.amazonaws.com/prod/places?id=
+###
+
+
+PUT https://i1hfs9poyc.execute-api.us-east-1.amazonaws.com/prod/places?id=aa4bd953-9c0c-4eaf-baa1-85a4bc2fefa8
+Content-Type: application/json
+
+{
+    "location": "Venezuela"
+}
+###
