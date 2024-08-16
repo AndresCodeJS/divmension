@@ -79,17 +79,34 @@ import { handler as userHandler } from "../src/services/users/handler";
 }) */
 
 
-//Login Usuario
+//Creacion de Usuario Divmension
 userHandler({
     httpMethod: 'POST',
-    path:'/users/login',
+    path:'/users/create',
     body: JSON.stringify({
-        username: 'shotsand1234',
-        password: '123456'
+        username: "Carlos",
+        email: "carlos91@gmail.com",
+        fullname: "Carlos Arevalo",
+        password: "1234567*"
     })
 } as any,{} as any).then(result=>{
     console.log(result)
 })
+
+
+//Login de usuario divmension
+/* userHandler({
+    httpMethod: 'POST',
+    path:'/users/login',
+    body: JSON.stringify({
+        username: "Andres",
+        password: "1234567*"
+    })
+} as any,{} as any).then(result=>{
+    console.log(result)
+}) */
+
+
 
 //Refrescar pagina
 /* userHandler({

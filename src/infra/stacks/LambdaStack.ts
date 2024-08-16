@@ -9,40 +9,46 @@ import { join } from 'node:path';
 
 
 interface LambdaStackProps extends StackProps {
-    placesTable: ITable
+    devmensionTable: ITable,
+    gsi1Name: string
 }
 
 
 export class LambdaStack extends Stack {
 
-    public readonly placesLambdaIntegration: LambdaIntegration
+    public readonly usersLambdaIntegration: LambdaIntegration
 
     constructor(scope: Construct, id: string, props: LambdaStackProps) {
         super(scope, id, props)
 
-        const placesLambda = new NodejsFunction(this, 'HelloLambda', {
+        const usersLambda = new NodejsFunction(this, 'usersLambda', {
             runtime: Runtime.NODEJS_18_X,
             handler: 'handler',
-            entry: (join(__dirname, '..', '..', 'services', 'places', 'handler.ts')),
+            entry: (join(__dirname, '..', '..', 'services', 'users', 'handler.ts')),
             environment: {
-                TABLE_NAME: props.placesTable.tableName
+                TABLE_NAME: props.devmensionTable.tableName,
+                TABLE_GSI1_NAME:props.gsi1Name ,
+                SECRET_KEY: 'DIVMENSION_SECRET_PW_KEY'
             },
               bundling: {
-                  nodeModules: ['uuid'],
+                  nodeModules: ['bcryptjs'],
               },
 
         })
 
-        placesLambda.addToRolePolicy(new PolicyStatement({
+        usersLambda.addToRolePolicy(new PolicyStatement({
             effect: Effect.ALLOW,
             actions: [
                 'dynamodb:PutItem',
                 'dynamodb:DeleteItem',
                 'dynamodb:GetItem',
                 'dynamodb:UpdateItem',
-                'dynamodb:Scan'
+                'dynamodb:Scan',
+                'dynamodb:Query'
             ],
-            resources: [props.placesTable.tableArn]
+            resources: [props.devmensionTable.tableArn,
+                `${props.devmensionTable.tableArn}/index/${props.gsi1Name}`
+            ]
 
         }))
 
@@ -55,7 +61,7 @@ export class LambdaStack extends Stack {
               resources: ['*'] //bad practice
           })) */
 
-        this.placesLambdaIntegration = new LambdaIntegration(placesLambda)
+        this.usersLambdaIntegration = new LambdaIntegration(usersLambda)
     }
 
 }

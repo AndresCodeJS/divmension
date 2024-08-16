@@ -8,15 +8,15 @@ import { UserLambdaStack } from "./stacks/UserLambdaStack";
 
 
 const app = new App();
-const dataStack = new DataStack(app, 'DataStack')
-const lambdaStack = new LambdaStack(app, 'LambdaStack', { placesTable: dataStack.placesTable })
-const authStack = new AuthStack(app, 'AuthStack')
+const dataStack = new DataStack(app, 'DataStack', )
+const lambdaStack = new LambdaStack(app, 'LambdaStack', { devmensionTable: dataStack.devmensionTable, gsi1Name: dataStack.gsi1Name })
+/* const authStack = new AuthStack(app, 'AuthStack') */
 
 /* const userLambdaStack = new UserLambdaStack(app, 'UserLambdaStack') */
 
 new ApiStack(app, 'ApiStack', {
-    placesLambdaIntegration: lambdaStack.placesLambdaIntegration,
+    usersLambdaIntegration: lambdaStack.usersLambdaIntegration,
 /*     usersLambdaIntegration: userLambdaStack.usersLambdaIntegration, */
-    userPool: authStack.userPool
+    /* userPool: authStack.userPool */
 })
 
