@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+/* import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { AuthService } from "./AuthService";
 
 
@@ -12,4 +12,4 @@ export async function postEmailCode(event: APIGatewayProxyEvent): Promise<APIGat
 
     return response
 
-}
+} */

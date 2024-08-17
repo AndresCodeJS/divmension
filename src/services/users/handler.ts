@@ -9,9 +9,9 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { JsonError, MissingFieldError } from "../shared/Validator";
 import { addCorsHeader } from "../shared/utils";
 import { createUser } from "./createUser";
-import { postEmailCode } from "./PostEmailCode";
+/* import { postEmailCode } from "./PostEmailCode"; */
 import { postUserLogin } from "./PostUserLogin";
-import { postUserRefresh } from "./PostUserRefresh";
+/* import { postUserRefresh } from "./PostUserRefresh"; */
 
 const client = new DynamoDBClient({});
 
@@ -36,16 +36,16 @@ async function handler(
           response = postResponse;
         }
         if (event.path == "/users/emailcode") {
-          const postEmailCodeResponse = await postEmailCode(event);
-          response = postEmailCodeResponse;
+   /*        const postEmailCodeResponse = await postEmailCode(event);
+          response = postEmailCodeResponse; */
         }
         if (event.path == "/users/login") { //Login de Usuario
           const postUserLoginResponse = await postUserLogin(event, docClient);
           response = postUserLoginResponse;
         }
         if (event.path == "/users/refresh") {
-          const postUserLoginResponse = await postUserRefresh(event);
-          response = postUserLoginResponse;
+   /*        const postUserLoginResponse = await postUserRefresh(event);
+          response = postUserLoginResponse; */
         }
         break;
       case "PUT":

@@ -62,7 +62,7 @@ export async function postUserLogin(
     email: getUser.Item.email,
   };
 
-  let jwt = auth.signToken(user);
+  let jwt = await auth.signToken(user);
 
   //TODO Generar JWT TOKEN
   //Devolver todos los datos para almacenarlos en el storage

@@ -120,7 +120,7 @@ export async function createUser(
 
   let user = { username: usernameClean, fullname: fullnameClean, email };
 
-  let jwt = auth.signToken(user);
+  let jwt = await auth.signToken(user);
 
   return {
     statusCode: 200,

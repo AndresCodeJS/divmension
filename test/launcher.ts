@@ -80,7 +80,7 @@ import { handler as userHandler } from "../src/services/users/handler";
 
 
 //Creacion de Usuario Divmension
-userHandler({
+/* userHandler({
     httpMethod: 'POST',
     path:'/users/create',
     body: JSON.stringify({
@@ -91,20 +91,20 @@ userHandler({
     })
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 
 //Login de usuario divmension
-/* userHandler({
+userHandler({
     httpMethod: 'POST',
     path:'/users/login',
     body: JSON.stringify({
-        username: "Andres",
+        username: "Carlos",
         password: "1234567*"
     })
 } as any,{} as any).then(result=>{
     console.log(result)
-}) */
+})
 
 
 
