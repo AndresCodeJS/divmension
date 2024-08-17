@@ -19,7 +19,8 @@
                 "AWS_REGION":"us-east-1",
                 "TABLE_NAME":"Devmension-0affd27f5153",
                 "TABLE_GSI1_NAME":"gsi1",
-                "SECRET_KEY": "DIVMENSION_SECRET_PW_KEY"
+                "SECRET_KEY": "DIVMENSION_SECRET_PW_KEY",
+                "JWT_SECRET": "JWT_SECRET_CODE"
                 //En caso de trabajar en la cuenta de una empresa, colocar token o credenciales aqui
             }
         }

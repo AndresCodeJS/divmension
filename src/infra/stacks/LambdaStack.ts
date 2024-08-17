@@ -28,10 +28,11 @@ export class LambdaStack extends Stack {
             environment: {
                 TABLE_NAME: props.devmensionTable.tableName,
                 TABLE_GSI1_NAME:props.gsi1Name ,
-                SECRET_KEY: 'DIVMENSION_SECRET_PW_KEY'
+                SECRET_KEY: 'DIVMENSION_SECRET_PW_KEY',
+                JWT_SECRET: 'JWT_SECRET_CODE'
             },
               bundling: {
-                  nodeModules: ['bcryptjs'],
+                  nodeModules: ['bcryptjs', 'jsonwebtoken'],
               },
 
         })

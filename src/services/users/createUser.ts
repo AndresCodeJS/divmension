@@ -2,8 +2,11 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { GetCommand, PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import bcrypt from "bcryptjs";
+import { AuthService } from "./AuthService";
 
 const SECRET_KEY = process.env.SECRET_KEY;
+
+const auth = new AuthService();
 
 export async function createUser(
   event: APIGatewayProxyEvent,
@@ -62,7 +65,7 @@ export async function createUser(
   const hashedPassword = await bcrypt.hash(passwordWithSecret, 10);
 
   // Elimina espacios al inicio y al final, y cuando existen 2 o mas espacios intermedios
-  let fullnameClean = fullname.trim().replace(/\s+/g, ' ').toLowerCase();
+  let fullnameClean = fullname.trim().replace(/\s+/g, " ").toLowerCase();
 
   //Registra el ususario
 
@@ -81,13 +84,13 @@ export async function createUser(
 
   //Guarda una combinacion de username con fullname para ser usada en la barra de búsqueda de usuarios
 
-  let fullnameFixed = fullnameClean.trim().replace(/\s+/g, '.'); //reemplaza espacios por puntos
+  let fullnameFixed = fullnameClean.trim().replace(/\s+/g, "."); //reemplaza espacios por puntos
 
-  let usernameClean = username.toLowerCase() // lleva minusculas el nombre de usuario
+  let usernameClean = username.toLowerCase(); // lleva minusculas el nombre de usuario
 
   //Para futuras busquedas por username -----------------------------------------------
 
-  let usernameFullnameMix = usernameClean + '/'+ fullnameFixed 
+  let usernameFullnameMix = usernameClean + "/" + fullnameFixed;
 
   const commandUsernameFullname = new PutCommand({
     TableName: process.env.TABLE_NAME,
@@ -101,7 +104,7 @@ export async function createUser(
 
   //Para futuras busquedas por fullname --------------------------------------------------
 
-  let fullnameUsernameMix = fullnameFixed + '#' + usernameClean // para busquedas por fullname
+  let fullnameUsernameMix = fullnameFixed + "#" + usernameClean; // para busquedas por fullname
 
   const commandFullnameUsername = new PutCommand({
     TableName: process.env.TABLE_NAME,
@@ -113,12 +116,14 @@ export async function createUser(
 
   await ddbDocClient.send(commandFullnameUsername);
 
-  //TODO Generar JWT TOKEN
-  //Devolver todos los datos para almacenarlos en el storage
-  //Almacenar el JWT en el storage
+  // Generación de token JWT ...............................................................
+
+  let user = { username: usernameClean, fullname: fullnameClean, email };
+
+  let jwt = auth.signToken(user);
 
   return {
     statusCode: 200,
-    body: JSON.stringify("User created"),
+    body: JSON.stringify({ user, jwt }),
   };
 }

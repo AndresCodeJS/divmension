@@ -2,14 +2,16 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import bcrypt from "bcryptjs";
+import { AuthService } from "./AuthService";
 
 const SECRET_KEY = process.env.SECRET_KEY;
+
+const auth = new AuthService();
 
 export async function postUserLogin(
   event: APIGatewayProxyEvent,
   ddbDocClient: DynamoDBClient
 ): Promise<APIGatewayProxyResult> {
-
   const { username, password } = JSON.parse(event.body);
 
   //// Recupera el usuario de la base de datos ------------------------------------------------
@@ -37,9 +39,12 @@ export async function postUserLogin(
   const passwordWithSecret = password + SECRET_KEY;
 
   // Verifica la contraseña
-  const isPasswordValid = await bcrypt.compare(passwordWithSecret, getUser.Item.password);
+  const isPasswordValid = await bcrypt.compare(
+    passwordWithSecret,
+    getUser.Item.password
+  );
 
-  if (!isPasswordValid ) {
+  if (!isPasswordValid) {
     return {
       statusCode: 401,
       body: JSON.stringify({
@@ -49,13 +54,23 @@ export async function postUserLogin(
     };
   }
 
+  // Generacion de token JWT ------------------------------------------------------
+
+  let user = {
+    username: username.toLowerCase(),
+    fullname: getUser.Item.fullname,
+    email: getUser.Item.email,
+  };
+
+  let jwt = auth.signToken(user);
+
   //TODO Generar JWT TOKEN
   //Devolver todos los datos para almacenarlos en el storage
   //Almacenar el JWT en el storage
 
   return {
     statusCode: 200,
-    body: JSON.stringify(getUser.Item),
+    body: JSON.stringify({ user, jwt }),
   };
 
   /* const response: APIGatewayProxyResult = await Auth.userLogin(username, password) */
