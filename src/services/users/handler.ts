@@ -11,7 +11,8 @@ import { addCorsHeader } from "../shared/utils";
 import { createUser } from "./createUser";
 /* import { postEmailCode } from "./PostEmailCode"; */
 import { postUserLogin } from "./PostUserLogin";
-/* import { postUserRefresh } from "./PostUserRefresh"; */
+import { getUserRefresh } from "./getUserRefresh";
+
 
 const client = new DynamoDBClient({});
 
@@ -24,10 +25,13 @@ async function handler(
   let response: APIGatewayProxyResult;
 
   try {
-    switch (event.httpMethod) {
+    switch (event.
+      httpMethod) {
       case "GET":
-        /*                 const getResponse = await getPlaces(event, ddbClient)
-                                response = getResponse */
+        if (event.path == "/users/refresh-page") { //Obtiene usuario al refrescar la página
+          const getUserRefreshPage = await getUserRefresh(event);
+          response = getUserRefreshPage;
+        }
         break;
 
       case "POST": 
@@ -35,18 +39,15 @@ async function handler(
           const postResponse = await createUser(event, docClient);
           response = postResponse;
         }
-        if (event.path == "/users/emailcode") {
+        /* if (event.path == "/users/emailcode") { */
    /*        const postEmailCodeResponse = await postEmailCode(event);
           response = postEmailCodeResponse; */
-        }
+        /* } */
         if (event.path == "/users/login") { //Login de Usuario
           const postUserLoginResponse = await postUserLogin(event, docClient);
           response = postUserLoginResponse;
         }
-        if (event.path == "/users/refresh") {
-   /*        const postUserLoginResponse = await postUserRefresh(event);
-          response = postUserLoginResponse; */
-        }
+        
         break;
       case "PUT":
         /*  const updateResponse = await updatePlaces(event, ddbClient)

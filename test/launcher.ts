@@ -1,3 +1,4 @@
+import { Authorization } from "aws-cdk-lib/aws-events";
 import { handler } from "../src/services/places/handler";
 import { handler as userHandler } from "../src/services/users/handler";
 
@@ -80,22 +81,22 @@ import { handler as userHandler } from "../src/services/users/handler";
 
 
 //Creacion de Usuario Divmension
-/* userHandler({
+userHandler({
     httpMethod: 'POST',
     path:'/users/create',
     body: JSON.stringify({
-        username: "Carlos",
-        email: "carlos91@gmail.com",
+        username: "Juan",
+        email: "Juan91@gmail.com",
         fullname: "Carlos Arevalo",
         password: "1234567*"
     })
 } as any,{} as any).then(result=>{
     console.log(result)
-}) */
+})
 
 
 //Login de usuario divmension
-userHandler({
+/* userHandler({
     httpMethod: 'POST',
     path:'/users/login',
     body: JSON.stringify({
@@ -104,14 +105,15 @@ userHandler({
     })
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 
 
 //Refrescar pagina
 /* userHandler({
-    httpMethod: 'POST',
-    path:'/users/refresh',
+    httpMethod: 'GET',
+    path:'/users/refresh-page',
+    headers: {authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhcmxvcyIsImZ1bGxuYW1lIjoiY2FybG9zIGFyZXZhbG8iLCJlbWFpbCI6ImNhcmxvczkxQGdtYWlsLmNvbSIsImlhdCI6MTcyMzkyODIyMSwiZXhwIjoxNzIzOTcxNDIxfQ.F5IVpRT1gJmRoEMUw9EEi7zx9YlOD5sgD_r1q5D7Pt4"}
 } as any,{} as any).then(result=>{
     console.log(result)
 }) */

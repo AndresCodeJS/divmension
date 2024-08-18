@@ -1,15 +1,15 @@
-@token = eyJraWQiOiJueUFwWWlJY1JxdHZtWis3UlRvcFZ1ME4welwvbWlKNVFTNEpVTFZINGh5MD0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1MTUJo5rHvqfmGuzHPYuJ8NVq2EvBsGzaV0MJbos6zr4r3b8QGLzLMwJkzTmb8PNpQTsmOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0yLfvtc6Q45YFjdT6YcEMVjtSE2CjbFcSioJl9ZeDBHNmWSRY2tRXtLdFsW7czHX42k1smmn1M2Zjlzdmg0ZDAXYAV2NrHoN2cwGym6HQdHFftt9XHXJnR4MWhzjdtH8rTREcxVwm8bgvDgcw79dnHxGqMpqAQjM1NyIsImV2ZW50X2lkIjoiYTVkZjE3ZjUtNThmYi00ZGQwLWFiY2ItNDNbJzGBWonpC5XP8XYzqT3X95MBEjohvPLjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTddMzmvSMzd1nuMstQvdnCHCM27rtnS9ELCN4GXQiOjE3MjanwNnBtzaeBCY9ftDtCoDpyp3cTeK9DJYW1JGGFlMi1iZjA3LTBhOWZjODMzZSc22P8uKkVi3X1Uk1SPwu8Lm5L5vKmzNCJ9.t9rjUxCWKPNa9uQrZSCwqtM8oyGe6O5TYwlOhGiM_2bDFVNMNUH7oNwi1vLya6Y89SjD4sCnziBhTrHye7bPvTZr7n_DhJhA2EqfOx8YnkkrAgzZNJ_j2KVWjMJyYNQn9j93-Qr39ivWObikVnknCb06G5ZqRx1LDKsPlH4Xpxbm9-RlktNZM6NEgGMUW_HkRmhZrP3RdFqI6nMTeiXVRv6u7WQ9Ky0_nb0OvCA60O37ms1HGhDgphA9oFB9VDeWxLeTFMm6tKDmm2FPnvFWLg2K1xvLYMn1M3WEwtXmYzp2iLAk8SdxJgEkKLzog-mh9LA_x5OKtlmwxTlB4Hg
+@token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhcmxvcyIsImZ1bGxuYW1lIjoiY2FybG9zIGFyZXZhbG8iLCJlbWFpbCI6ImNhcmxvczkxQGdtYWlsLmNvbSIsImlhdCI6MTcyMzkyODIyMSwiZXhwIjoxNzIzOTcxNDIxfQ.F5IVpRT1gJmRoEMUw9EEi7zx9YlOD5sgD_r1q5D7Pt4"
 
-GET https://936tpf8n7a.execute-api.us-east-2.amazonaws.com/prod/places
-Authorization:{{token}}
+GET https://edpeimqbi3.execute-api.us-east-1.amazonaws.com/prod/users/refresh-page
+authorization:{{token}}
 ###
 
 POST https://edpeimqbi3.execute-api.us-east-1.amazonaws.com/prod/users/create
 Content-Type: application/json
 
 {
-    "username": "Gomez",
-    "email": "gomez@gmail.com",
+    "username": "Gomez12",
+    "email": "gome33z@gmail.com",
     "fullname": "Andres Gomez",
     "password": "1234567*",
     "repassword": "1234567*"

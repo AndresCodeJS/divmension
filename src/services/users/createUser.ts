@@ -27,7 +27,7 @@ export async function createUser(
 
   if (getUser.Item) {
     return {
-      statusCode: 200,
+      statusCode: 401,
       body: JSON.stringify({
         type: "USER_EXISTS",
         message: "User already exists",
@@ -50,7 +50,7 @@ export async function createUser(
 
   if (getEmail.Items.length) {
     return {
-      statusCode: 200,
+      statusCode: 401,
       body: JSON.stringify({
         type: "EMAIL_EXISTS",
         message: "Email already exists",

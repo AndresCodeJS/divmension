@@ -47,11 +47,15 @@ export class ApiStack extends Stack {
         //Login de Usuario
         const loginResource = userResource.addResource('login', optionsWithCors)
         loginResource.addMethod('POST', props.usersLambdaIntegration)
+
+        //Obtiene información de usuario al refresacar la página
+        const refreshPageResource = userResource.addResource('refresh-page', optionsWithCors)
+        refreshPageResource.addMethod('GET', props.usersLambdaIntegration)
         
-        userResource.addMethod('GET', props.usersLambdaIntegration)
+        /* userResource.addMethod('GET', props.usersLambdaIntegration)
         userResource.addMethod('POST', props.usersLambdaIntegration)
         userResource.addMethod('DELETE', props.usersLambdaIntegration)
-        userResource.addMethod('PUT', props.usersLambdaIntegration)
+        userResource.addMethod('PUT', props.usersLambdaIntegration) */
 
        /*  const usersResource = api.root.addResource('users',optionsWithCors)
         const refreshResource = usersResource.addResource('refresh',optionsWithCors)
