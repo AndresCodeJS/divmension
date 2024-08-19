@@ -10,7 +10,10 @@ export async function getUserRefresh(
     let token = ''
 
     if(event.headers){
-        token = event?.headers["authorization"];
+        token = event?.headers["Authorization"];
+        console.log('el token es:'+ token)
+    }else{
+        console.log('No hay token')
     }
   
   if (!token) {

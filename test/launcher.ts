@@ -81,7 +81,7 @@ import { handler as userHandler } from "../src/services/users/handler";
 
 
 //Creacion de Usuario Divmension
-userHandler({
+/* userHandler({
     httpMethod: 'POST',
     path:'/users/create',
     body: JSON.stringify({
@@ -92,7 +92,7 @@ userHandler({
     })
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 
 //Login de usuario divmension
@@ -100,7 +100,7 @@ userHandler({
     httpMethod: 'POST',
     path:'/users/login',
     body: JSON.stringify({
-        username: "Carlos",
+        username: "gomez12",
         password: "1234567*"
     })
 } as any,{} as any).then(result=>{
@@ -110,10 +110,11 @@ userHandler({
 
 
 //Refrescar pagina
-/* userHandler({
+userHandler({
     httpMethod: 'GET',
     path:'/users/refresh-page',
-    headers: {authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhcmxvcyIsImZ1bGxuYW1lIjoiY2FybG9zIGFyZXZhbG8iLCJlbWFpbCI6ImNhcmxvczkxQGdtYWlsLmNvbSIsImlhdCI6MTcyMzkyODIyMSwiZXhwIjoxNzIzOTcxNDIxfQ.F5IVpRT1gJmRoEMUw9EEi7zx9YlOD5sgD_r1q5D7Pt4"}
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvbWV6MTIiLCJmdWxsbmFtZSI6ImFuZHJlcyBnb21leiIsImVtYWlsIjoiZ29tZTMzekBnbWFpbC5jb20iLCJpYXQiOjE3MjQwMzE3NjcsImV4cCI6MTcyNDA3NDk2N30.z1FmRU9p6-mrGvfDImy2qkHP0e7E-K2oK6WNcURzYUQ"}
 } as any,{} as any).then(result=>{
     console.log(result)
-}) */
+})
+
