@@ -1,4 +1,3 @@
-
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -12,7 +11,7 @@ import { createUser } from "./createUser";
 /* import { postEmailCode } from "./PostEmailCode"; */
 import { postUserLogin } from "./PostUserLogin";
 import { getUserRefresh } from "./getUserRefresh";
-
+import { getUsersBySearch } from "./GetUsersBySearch";
 
 const client = new DynamoDBClient({});
 
@@ -25,29 +24,36 @@ async function handler(
   let response: APIGatewayProxyResult;
 
   try {
-    switch (event.
-      httpMethod) {
+    switch (event.httpMethod) {
       case "GET":
-        if (event.path == "/users/refresh-page") { //Obtiene usuario al refrescar la página
+        if (event.path == "/users/refresh-page") {
+          //Obtiene usuario al refrescar la página
           const getUserRefreshPage = await getUserRefresh(event);
+          response = getUserRefreshPage;
+        }
+        if (event.path == "/users/search") {
+          //Obtiene las coincidencias de usuarios escritos en la barra de busqueda
+          const getUserRefreshPage = await getUsersBySearch(event, docClient);
           response = getUserRefreshPage;
         }
         break;
 
-      case "POST": 
-        if (event.path == "/users/create") { //Registro de Usuario
+      case "POST":
+        if (event.path == "/users/create") {
+          //Registro de Usuario
           const postResponse = await createUser(event, docClient);
           response = postResponse;
         }
         /* if (event.path == "/users/emailcode") { */
-   /*        const postEmailCodeResponse = await postEmailCode(event);
+        /*        const postEmailCodeResponse = await postEmailCode(event);
           response = postEmailCodeResponse; */
         /* } */
-        if (event.path == "/users/login") { //Login de Usuario
+        if (event.path == "/users/login") {
+          //Login de Usuario
           const postUserLoginResponse = await postUserLogin(event, docClient);
           response = postUserLoginResponse;
         }
-        
+
         break;
       case "PUT":
         /*  const updateResponse = await updatePlaces(event, ddbClient)

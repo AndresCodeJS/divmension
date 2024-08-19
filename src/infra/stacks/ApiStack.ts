@@ -51,6 +51,10 @@ export class ApiStack extends Stack {
         //Obtiene información de usuario al refresacar la página
         const refreshPageResource = userResource.addResource('refresh-page', optionsWithCors)
         refreshPageResource.addMethod('GET', props.usersLambdaIntegration)
+
+        //Obtiene los usuarios que coinciden con lo ingresado en la barra de búsqueda
+        const searchBarResource = userResource.addResource('search', optionsWithCors)
+        searchBarResource.addMethod('GET', props.usersLambdaIntegration)
         
         /* userResource.addMethod('GET', props.usersLambdaIntegration)
         userResource.addMethod('POST', props.usersLambdaIntegration)
