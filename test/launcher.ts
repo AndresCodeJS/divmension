@@ -122,7 +122,7 @@ import { handler as userHandler } from "../src/services/users/handler";
 userHandler({
     httpMethod: 'GET',
     path:'/users/search/mistring',
-    pathParameters:{userString:' /#h. '}
+    pathParameters:{userString:' aa '}
 } as any,{} as any).then(result=>{
     console.log(result)
 })
