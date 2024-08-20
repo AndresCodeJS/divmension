@@ -1,6 +1,5 @@
-export interface PlaceEntry {
-    id: string,
-    location: string,
-    name: string,
-    photoUrl?: string
+export interface IUser {
+    username: string,
+    fullname: string,
+    photoUrl: string
 }

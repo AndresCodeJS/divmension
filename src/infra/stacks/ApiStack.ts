@@ -54,16 +54,9 @@ export class ApiStack extends Stack {
 
         //Obtiene los usuarios que coinciden con lo ingresado en la barra de búsqueda
         const searchBarResource = userResource.addResource('search', optionsWithCors)
-        searchBarResource.addMethod('GET', props.usersLambdaIntegration)
+        const searchParameterResource = searchBarResource.addResource('{userString}', optionsWithCors)
+        searchParameterResource .addMethod('GET', props.usersLambdaIntegration)
         
-        /* userResource.addMethod('GET', props.usersLambdaIntegration)
-        userResource.addMethod('POST', props.usersLambdaIntegration)
-        userResource.addMethod('DELETE', props.usersLambdaIntegration)
-        userResource.addMethod('PUT', props.usersLambdaIntegration) */
-
-       /*  const usersResource = api.root.addResource('users',optionsWithCors)
-        const refreshResource = usersResource.addResource('refresh',optionsWithCors)
-        refreshResource.addMethod('POST', props.usersLambdaIntegration, optionsWithAuth) */
     }
 
 }

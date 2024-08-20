@@ -110,10 +110,19 @@ import { handler as userHandler } from "../src/services/users/handler";
 
 
 //Refrescar pagina
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/users/refresh-page',
     headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvbWV6MTIiLCJmdWxsbmFtZSI6ImFuZHJlcyBnb21leiIsImVtYWlsIjoiZ29tZTMzekBnbWFpbC5jb20iLCJpYXQiOjE3MjQwMzE3NjcsImV4cCI6MTcyNDA3NDk2N30.z1FmRU9p6-mrGvfDImy2qkHP0e7E-K2oK6WNcURzYUQ"}
+} as any,{} as any).then(result=>{
+    console.log(result)
+}) */
+
+//Busqueda de usuarios
+userHandler({
+    httpMethod: 'GET',
+    path:'/users/search/mistring',
+    pathParameters:{userString:' /#h. '}
 } as any,{} as any).then(result=>{
     console.log(result)
 })

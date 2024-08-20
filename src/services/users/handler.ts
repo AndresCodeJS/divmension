@@ -31,7 +31,8 @@ async function handler(
           const getUserRefreshPage = await getUserRefresh(event);
           response = getUserRefreshPage;
         }
-        if (event.path == "/users/search") {
+       
+        if (event.path.startsWith("/users/search/")) {
           //Obtiene las coincidencias de usuarios escritos en la barra de busqueda
           const getUserRefreshPage = await getUsersBySearch(event, docClient);
           response = getUserRefreshPage;
