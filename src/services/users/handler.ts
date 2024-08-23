@@ -8,10 +8,11 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { JsonError, MissingFieldError } from "../shared/Validator";
 import { addCorsHeader } from "../shared/utils";
 import { createUser } from "./createUser";
-/* import { postEmailCode } from "./PostEmailCode"; */
 import { postUserLogin } from "./PostUserLogin";
 import { getUserRefresh } from "./getUserRefresh";
 import { getUsersBySearch } from "./GetUsersBySearch";
+import { getProfile } from "./GetProfile";
+
 
 const client = new DynamoDBClient({});
 
@@ -27,7 +28,7 @@ async function handler(
     switch (event.httpMethod) {
       case "GET":
         if (event.path == "/users/refresh-page") {
-          //Obtiene usuario al refrescar la página
+          //Obtiene usuario logueado al refrescar la página
           const getUserRefreshPage = await getUserRefresh(event);
           response = getUserRefreshPage;
         }
@@ -36,6 +37,11 @@ async function handler(
           //Obtiene las coincidencias de usuarios escritos en la barra de busqueda
           const getUserRefreshPage = await getUsersBySearch(event, docClient);
           response = getUserRefreshPage;
+        }
+        if (event.path.startsWith("/users/profile/")) {
+          //Obtiene los datos del usuario usando el username
+          const getUserProfile = await getProfile(event,docClient)
+          response = getUserProfile;
         }
         break;
 

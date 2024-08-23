@@ -119,10 +119,19 @@ import { handler as userHandler } from "../src/services/users/handler";
 }) */
 
 //Busqueda de usuarios
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/users/search/mistring',
-    pathParameters:{userString:' aa '}
+    pathParameters:{userString:'andres gomez'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+}) */
+
+// Obtener informacion de un usuario
+userHandler({
+    httpMethod: 'GET',
+    path:'/users/profile/',
+    pathParameters:{username: 'gomez12'}
 } as any,{} as any).then(result=>{
     console.log(result)
 })
