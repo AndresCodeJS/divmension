@@ -128,10 +128,23 @@ import { handler as userHandler } from "../src/services/users/handler";
 }) */
 
 // Obtener informacion de un usuario
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
     pathParameters:{username: 'gomez12'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+}) */
+
+//Seguir a un usuario
+userHandler({
+    httpMethod: 'POST',
+    path:'/users/follow',
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvbWV6MTIiLCJmdWxsbmFtZSI6ImFuZHJlcyBnb21leiIsImVtYWlsIjoiZ29tZTMzekBnbWFpbC5jb20iLCJpYXQiOjE3MjQ0NDU5NTgsImV4cCI6MTcyNDQ4OTE1OH0.Cc8PsDRj5a3OwbPHlYgQsWEaHJB4OqXo5ul8LfHix1M"},
+    body: JSON.stringify({
+        followingUser: 'andres'
+    })
+
 } as any,{} as any).then(result=>{
     console.log(result)
 })

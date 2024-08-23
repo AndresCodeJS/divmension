@@ -61,6 +61,10 @@ export class ApiStack extends Stack {
         const userProfileResource = userResource.addResource('profile', optionsWithCors)
         const getUserProfileResource = userProfileResource.addResource('{username}', optionsWithCors)
         getUserProfileResource.addMethod('GET', props.usersLambdaIntegration)
+
+        //Registra los seguidores y seguidos cuando un usuario sigue a otro usuario
+        const followResource = userResource.addResource('follow', optionsWithCors)
+        followResource.addMethod('POST', props.usersLambdaIntegration)
     }
 
 }

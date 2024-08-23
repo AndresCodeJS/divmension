@@ -12,6 +12,7 @@ import { postUserLogin } from "./PostUserLogin";
 import { getUserRefresh } from "./getUserRefresh";
 import { getUsersBySearch } from "./GetUsersBySearch";
 import { getProfile } from "./GetProfile";
+import { followUser } from "./FollowUser";
 
 
 const client = new DynamoDBClient({});
@@ -51,14 +52,15 @@ async function handler(
           const postResponse = await createUser(event, docClient);
           response = postResponse;
         }
-        /* if (event.path == "/users/emailcode") { */
-        /*        const postEmailCodeResponse = await postEmailCode(event);
-          response = postEmailCodeResponse; */
-        /* } */
         if (event.path == "/users/login") {
           //Login de Usuario
           const postUserLoginResponse = await postUserLogin(event, docClient);
           response = postUserLoginResponse;
+        }
+        if (event.path == "/users/follow") {
+          //Login de Usuario
+          const followUserResponse = await followUser(event, docClient);
+          response = followUserResponse;
         }
 
         break;
