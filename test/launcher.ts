@@ -85,15 +85,15 @@ import { handler as userHandler } from "../src/services/users/handler";
     httpMethod: 'POST',
     path:'/users/create',
     body: JSON.stringify({
-        username: "Juan",
-        email: "Juan91@gmail.com",
-        fullname: "Carlos Arevalo",
+        username: "david",
+        email: "david@gmail.com",
+        fullname: "David Sanchez",
         password: "1234567*"
     })
 } as any,{} as any).then(result=>{
     console.log(result)
-}) */
-
+})
+ */
 
 //Login de usuario divmension
 /* userHandler({
@@ -140,7 +140,7 @@ import { handler as userHandler } from "../src/services/users/handler";
 userHandler({
     httpMethod: 'POST',
     path:'/users/follow',
-    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdvbWV6MTIiLCJmdWxsbmFtZSI6ImFuZHJlcyBnb21leiIsImVtYWlsIjoiZ29tZTMzekBnbWFpbC5jb20iLCJpYXQiOjE3MjQ0NDU5NTgsImV4cCI6MTcyNDQ4OTE1OH0.Cc8PsDRj5a3OwbPHlYgQsWEaHJB4OqXo5ul8LfHix1M"},
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiZnVsbG5hbWUiOiJkYXZpZCBzYW5jaGV6IiwiZW1haWwiOiJkYXZpZEBnbWFpbC5jb20iLCJpYXQiOjE3MjQ0Njk5OTgsImV4cCI6MTcyNDUxMzE5OH0.6hlP4ZK42szMdZdJg5jGYv8XaIVHyZaqztF6JkKFrkM"},
     body: JSON.stringify({
         followingUser: 'andres'
     })

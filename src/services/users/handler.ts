@@ -7,7 +7,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { JsonError, MissingFieldError } from "../shared/Validator";
 import { addCorsHeader } from "../shared/utils";
-import { createUser } from "./createUser";
+import { createUser } from "./CreateUser";
 import { postUserLogin } from "./PostUserLogin";
 import { getUserRefresh } from "./getUserRefresh";
 import { getUsersBySearch } from "./GetUsersBySearch";

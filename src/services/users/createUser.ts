@@ -82,6 +82,22 @@ export async function createUser(
 
   const response = await ddbDocClient.send(command);
 
+  //Registra el elemento Count , para cuantificar cantidad de seguidores, seguidos y posts
+
+  const countCommand = new PutCommand({
+    TableName: process.env.TABLE_NAME,
+    Item: {
+      pk: username.toLowerCase(),
+      sk: "count",
+      posts: 0,
+      following: 0,
+      followers: 0,
+    },
+  });
+
+  await ddbDocClient.send(countCommand);
+
+
   //Guarda una combinacion de username con fullname para ser usada en la barra de búsqueda de usuarios
 
   let fullnameFixed = fullnameClean.trim().replace(/\s+/g, "."); //reemplaza espacios por puntos
