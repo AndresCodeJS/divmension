@@ -131,7 +131,7 @@ import { handler as userHandler } from "../src/services/users/handler";
 userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
-    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDUxNTYzMywiZXhwIjoxNzI0NTU4ODMzfQ.YMFv3-ErU0um2lmBeUB0ZSMXuBACekEnr67KqpXW3wo"},
+    headers: {Authorization:null},
     pathParameters:{username: 'juan'}
 } as any,{} as any).then(result=>{
     console.log(result)
