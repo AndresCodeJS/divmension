@@ -128,16 +128,17 @@ import { handler as userHandler } from "../src/services/users/handler";
 }) */
 
 // Obtener informacion de un usuario
-/* userHandler({
+userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
-    pathParameters:{username: 'gomez12'}
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDUxNTYzMywiZXhwIjoxNzI0NTU4ODMzfQ.YMFv3-ErU0um2lmBeUB0ZSMXuBACekEnr67KqpXW3wo"},
+    pathParameters:{username: 'juan'}
 } as any,{} as any).then(result=>{
     console.log(result)
-}) */
+})
 
 //Seguir a un usuario
-userHandler({
+/* userHandler({
     httpMethod: 'POST',
     path:'/users/follow',
     headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiZnVsbG5hbWUiOiJkYXZpZCBzYW5jaGV6IiwiZW1haWwiOiJkYXZpZEBnbWFpbC5jb20iLCJpYXQiOjE3MjQ0Njk5OTgsImV4cCI6MTcyNDUxMzE5OH0.6hlP4ZK42szMdZdJg5jGYv8XaIVHyZaqztF6JkKFrkM"},
@@ -148,4 +149,4 @@ userHandler({
 } as any,{} as any).then(result=>{
     console.log(result)
 })
-
+ */
