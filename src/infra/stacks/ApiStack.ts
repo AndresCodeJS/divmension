@@ -65,6 +65,14 @@ export class ApiStack extends Stack {
         //Registra los seguidores y seguidos cuando un usuario sigue a otro usuario
         const followResource = userResource.addResource('follow', optionsWithCors)
         followResource.addMethod('POST', props.usersLambdaIntegration)
+
+        //Elimina los registros de seguidores y seguidos cuando un usuario deja de seguir a otro usuario
+        const unfollowResource = userResource.addResource('unfollow', optionsWithCors)
+        unfollowResource.addMethod('POST', props.usersLambdaIntegration)
+
+        //Obtiene credenciales temporales para poder cargar fotos a s3
+        const s3CredentialsResource = userResource.addResource('s3-credentials', optionsWithCors)
+        s3CredentialsResource.addMethod('GET', props.usersLambdaIntegration)
     }
 
 }

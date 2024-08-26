@@ -1,18 +1,18 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommand, GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import bcrypt from "bcryptjs";
 import { AuthService } from "./AuthService";
 
 const auth = new AuthService();
 
-export async function followUser(
+export async function unfollowUser(
   event: APIGatewayProxyEvent,
   ddbDocClient: DynamoDBClient
 ): Promise<APIGatewayProxyResult> {
-  const { followingUser } = JSON.parse(event.body);
+  const { unfollowUser } = JSON.parse(event.body);
 
-  console.log(" following:" + followingUser);
+  
 
   let response = await auth.verifyToken(event); // Autenticacion de usuario
 
@@ -22,62 +22,63 @@ export async function followUser(
     let loggedUser = JSON.parse(response.body).username;
 
     try {
-      //Registra que el usuario loggeado sigue al usuario seleccionado
-      const commandFollowing = new PutCommand({
+      //Elimina el registro donde el usuario loggeado sigue al usuario seleccionado
+      const commandUnfollowing = new DeleteCommand({
         TableName: process.env.TABLE_NAME,
-        Item: {
+        Key: {
           pk: `${loggedUser}#following`,
-          sk: followingUser,
+          sk: unfollowUser,
         },
         ConditionExpression:
-          "attribute_not_exists(pk) AND attribute_not_exists(sk)",
-        ReturnValues: "ALL_OLD",
+        "attribute_exists(pk) AND attribute_exists(sk)",
+        ReturnValues: "NONE",
       });
 
-      await ddbDocClient.send(commandFollowing);
+      await ddbDocClient.send(commandUnfollowing);
 
-      //Registra que el usuario seleccionado tiene como seguidor al usuario loggeado
-      const commandFollower = new PutCommand({
+      //Elimina el registro donde el usuario seleccionado tiene como seguidor al usuario loggeado
+      const commandUnfollower = new DeleteCommand({
         TableName: process.env.TABLE_NAME,
-        Item: {
-          pk: `${followingUser}#follower`,
+        Key: {
+          pk: `${unfollowUser}#follower`,
           sk: loggedUser,
         },
+        ReturnValues: "NONE",
       });
 
-      await ddbDocClient.send(commandFollower);
+      await ddbDocClient.send(commandUnfollower);
 
-      //Incrementa en 1 los seguidos(following) del usuario loggeado
+      //Decrementa en 1 los seguidos(following) del usuario loggeado
       const commandUpdateFollowingCounter = new UpdateCommand({
         TableName: process.env.TABLE_NAME,
         Key: {
           pk: loggedUser,
           sk: "count" 
         },
-        UpdateExpression: "SET #attrName = #attrName + :incr",
+        UpdateExpression: "SET #attrName = #attrName - :decr",
         ExpressionAttributeNames: {
           "#attrName": "following"
         },
         ExpressionAttributeValues: {
-          ":incr": 1
+          ":decr": 1
         },
       })
 
       await ddbDocClient.send(commandUpdateFollowingCounter);
 
-      //Incrementa en 1 los seguidos(followers) del usuario seguido
+      //Decrementa en 1 los seguidos(followers) del usuario seguido
       const commandUpdateFollowersCounter = new UpdateCommand({
         TableName: process.env.TABLE_NAME,
         Key: {
-          pk: followingUser,
+          pk: unfollowUser,
           sk: "count" 
         },
-        UpdateExpression: "SET #attrName = #attrName + :incr",
+        UpdateExpression: "SET #attrName = #attrName - :decr",
         ExpressionAttributeNames: {
           "#attrName": "followers"
         },
         ExpressionAttributeValues: {
-          ":incr": 1
+          ":decr": 1
         },
         ReturnValues: "UPDATED_NEW"
       })
@@ -93,10 +94,10 @@ export async function followUser(
       };
     } catch (error) {
       if ((error.name = "ConditionalCheckFailedException")) {
-        // Ya se encuentra siguiendo al usuario
+        // No sigue al usuario
         response = {
           statusCode: 401,
-          body: JSON.stringify({ message: "already following this user" }),
+          body: JSON.stringify({ message: "already unfollowing this user" }),
         };
       } else {
         response = {

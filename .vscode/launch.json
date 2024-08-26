@@ -1,28 +1,26 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Debug Local File",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register"
-            ],
-            "args": [
-                "${relativeFile}"
-            ],
-            "env": {
-                "AWS_REGION":"us-east-1",
-                "TABLE_NAME":"Devmension-0affd27f5153",
-                "TABLE_GSI1_NAME":"gsi1",
-                "SECRET_KEY": "DIVMENSION_SECRET_PW_KEY",
-                "JWT_SECRET": "JWT_SECRET_CODE"
-                //En caso de trabajar en la cuenta de una empresa, colocar token o credenciales aqui
-            }
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Local File",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "args": ["${relativeFile}"],
+      "env": {
+        "AWS_REGION": "us-east-1",
+        "TABLE_NAME": "Devmension-0affd27f5153",
+        "TABLE_GSI1_NAME": "gsi1",
+        "SECRET_KEY": "DIVMENSION_SECRET_PW_KEY",
+        "JWT_SECRET": "JWT_SECRET_CODE",
+        "S3_ACCESS_ROLE_NAME": "s3-access-role-DataStack",
+        "ACCOUNT_ID": "339712893600",
+        "REGION": "us-east-1"
+        //En caso de trabajar en la cuenta de una empresa, colocar token o credenciales aqui
+      }
+    }
+  ]
 }

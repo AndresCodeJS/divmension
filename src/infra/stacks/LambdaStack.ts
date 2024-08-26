@@ -1,15 +1,18 @@
 import { Duration, Stack, StackProps } from "aws-cdk-lib";
 import { LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import { ITable } from "aws-cdk-lib/aws-dynamodb";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, PolicyStatement, Role } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 import { join } from "node:path";
 
 interface LambdaStackProps extends StackProps {
   devmensionTable: ITable;
   gsi1Name: string;
+  s3AccessRole: Role;
+  photosBucket: IBucket;
 }
 
 export class LambdaStack extends Stack {
@@ -27,11 +30,15 @@ export class LambdaStack extends Stack {
         TABLE_GSI1_NAME: props.gsi1Name,
         SECRET_KEY: "DIVMENSION_SECRET_PW_KEY",
         JWT_SECRET: "JWT_SECRET_CODE",
+        S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName,
+        ACCOUNT_ID:'339712893600',
+        REGION:'us-east-1'
       },
+      role: props.s3AccessRole,
       bundling: {
         nodeModules: ["bcryptjs", "jsonwebtoken"],
       },
-      timeout: Duration.seconds(6)
+      timeout: Duration.seconds(6),
     });
 
     usersLambda.addToRolePolicy(
@@ -49,8 +56,20 @@ export class LambdaStack extends Stack {
           props.devmensionTable.tableArn,
           `${props.devmensionTable.tableArn}/index/${props.gsi1Name}`,
         ],
-      })
+      },
+    ),
+      
     );
+
+   /*  usersLambda.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: ["sts:AssumeRole"],
+        resources: [
+          `arn:aws:iam::339712893600:role/${props.s3AccessRole.roleName}`
+        ],
+      })
+    ); */
 
     /*   placesLambda.addToRolePolicy(new PolicyStatement({
               effect: Effect.ALLOW,

@@ -13,11 +13,16 @@ import { getUserRefresh } from "./getUserRefresh";
 import { getUsersBySearch } from "./GetUsersBySearch";
 import { getProfile } from "./GetProfile";
 import { followUser } from "./FollowUser";
+import { unfollowUser } from "./UnfollowUser";
+import { getS3Credentials } from "./GetS3Credentials";
+import { STSClient } from "@aws-sdk/client-sts";
 
 
 const client = new DynamoDBClient({});
 
 const docClient = DynamoDBDocumentClient.from(client);
+
+export const sts = new STSClient({ region: process.env.REGION });
 
 async function handler(
   event: APIGatewayProxyEvent,
@@ -44,6 +49,11 @@ async function handler(
           const getUserProfile = await getProfile(event,docClient)
           response = getUserProfile;
         }
+        if (event.path.startsWith("/users/s3-credentials")) {
+          //Obtiene los datos del usuario usando el username
+          const s3Credentials = await getS3Credentials(event,sts)
+          response = s3Credentials;
+        }
         break;
 
       case "POST":
@@ -58,8 +68,13 @@ async function handler(
           response = postUserLoginResponse;
         }
         if (event.path == "/users/follow") {
-          //Login de Usuario
+          //Seguir a un usuario
           const followUserResponse = await followUser(event, docClient);
+          response = followUserResponse;
+        }
+        if (event.path == "/users/unfollow") {
+          //Dejar de seguir a un usuario
+          const followUserResponse = await unfollowUser(event, docClient);
           response = followUserResponse;
         }
 

@@ -1,6 +1,6 @@
 import { Authorization } from "aws-cdk-lib/aws-events";
-import { handler } from "../src/services/places/handler";
 import { handler as userHandler } from "../src/services/users/handler";
+import { unfollowUser } from "../src/services/users/UnfollowUser";
 
 // Post Test
 /* handler({
@@ -128,25 +128,48 @@ import { handler as userHandler } from "../src/services/users/handler";
 }) */
 
 // Obtener informacion de un usuario
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
     headers: {Authorization:null},
     pathParameters:{username: 'juan'}
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 //Seguir a un usuario
 /* userHandler({
     httpMethod: 'POST',
     path:'/users/follow',
-    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiZnVsbG5hbWUiOiJkYXZpZCBzYW5jaGV6IiwiZW1haWwiOiJkYXZpZEBnbWFpbC5jb20iLCJpYXQiOjE3MjQ0Njk5OTgsImV4cCI6MTcyNDUxMzE5OH0.6hlP4ZK42szMdZdJg5jGYv8XaIVHyZaqztF6JkKFrkM"},
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDUyOTM0OSwiZXhwIjoxNzI0NTcyNTQ5fQ.n-auQGS7tnDUXVIMnZwdYoH3WndVjBctIdmOiplfNSs"},
     body: JSON.stringify({
         followingUser: 'andres'
     })
 
 } as any,{} as any).then(result=>{
     console.log(result)
-})
- */
+}) */
+
+
+//Dejar de seguir a un usuario
+/* userHandler({
+    httpMethod: 'POST',
+    path:'/users/unfollow',
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDUyOTM0OSwiZXhwIjoxNzI0NTcyNTQ5fQ.n-auQGS7tnDUXVIMnZwdYoH3WndVjBctIdmOiplfNSs"},
+    body: JSON.stringify({
+        unfollowUser: 'david'
+    })
+
+} as any,{} as any).then(result=>{
+    console.log(result)
+}) */
+
+//Obtener credenciales 
+userHandler({
+httpMethod: 'GET',
+path:'/users/s3-credentials',
+headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDYzNDc0NCwiZXhwIjoxNzI0Njc3OTQ0fQ.EQf9U5cxBpdc4Hm1SPOdAHfGAgNKHOt3iOldYErspZI"},
+} as any,{} as any).then(result=>{
+console.log(result)
+}) 
+
