@@ -12,6 +12,9 @@ export async function getS3Credentials(
   let response = await auth.verifyToken(event);
 
   if (response.statusCode == 200) {
+
+    let loggedUser = JSON.parse(response.body).username;
+
     const command = new AssumeRoleCommand({
       RoleArn: `arn:aws:iam::${process.env.ACCOUNT_ID}:role/${process.env.S3_ACCESS_ROLE_NAME}`,
       RoleSessionName: "UserSession",
@@ -27,6 +30,7 @@ export async function getS3Credentials(
           SecretAccessKey: data.Credentials.SecretAccessKey,
           SessionToken: data.Credentials.SessionToken,
           Expiration: data.Credentials.Expiration,
+          user: loggedUser
         }),
       };
     } catch (error) {

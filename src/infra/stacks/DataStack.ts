@@ -25,7 +25,7 @@ import {
   Effect,
   ArnPrincipal,
   CompositePrincipal,
-  ManagedPolicy
+  ManagedPolicy,
 } from "aws-cdk-lib/aws-iam";
 
 export class DataStack extends Stack {
@@ -62,8 +62,25 @@ export class DataStack extends Stack {
       value: this.photosBucket.bucketName,
     });
 
-    // Rol para lambda pueda acceder al bucket ---------------------------------------------
+    // Creacion del rol para poder acceder al bucket ---------------------------------------------
     this.s3AccessRole = this.createS3AccessRole();
+
+    //Agregarmos politica al bucket para que acepte al rol -----------------------------------
+
+    const bucketPolicy = new PolicyStatement({
+      actions: ["s3:PutObject", "s3:PutObjectAcl", "s3:GetObject"],
+      resources: [this.photosBucket.bucketArn + "/*"],
+      principals: [
+        /* new ServicePrincipal('lambda.amazonaws.com'), */
+        new ArnPrincipal(this.s3AccessRole.roleArn),
+      ],
+    });
+
+   /*  bucketPolicy.addCondition("StringLike", {
+      's3:x-amz-content-type': ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    }); */
+
+    this.photosBucket.addToResourcePolicy(bucketPolicy);
 
     // Exportar el ARN del rol como un output del stack
     new CfnOutput(this, "S3AccessRoleArn", {
@@ -126,12 +143,13 @@ export class DataStack extends Stack {
   }
 
   //Funcion creacion de rol para poder acceder al bucket de fotos (Modificar cada vez que s ecambie de cuenta)
+  // Se debe ir a las politicas de este rol en aws console y en relaciones de confianza en "Principal" -> agregar "AWS":ARN del ROL de la funcion lambda
   private createS3AccessRole(): Role {
     const role = new Role(this, "S3AccessRole", {
       //Modificar cada vez que se cambie de usuario o de funcion lambda (y tanto al usuario como funcion lamba otorgar politicas de "Action": "sts:AssumeRole")
       assumedBy: new CompositePrincipal(
-        new ServicePrincipal('lambda.amazonaws.com'),
-        new ArnPrincipal('arn:aws:iam::339712893600:user/Andres'),
+        new ServicePrincipal("lambda.amazonaws.com"),
+        new ArnPrincipal("arn:aws:iam::339712893600:user/Andres")
         /* new ArnPrincipal('arn:aws:lambda:us-east-1:339712893600:function:LambdaStack-usersLambdaB774E0F9-GAjf5O7OhHQe') */
       ),
       roleName: `s3-access-role-${this.stackName}`,
@@ -150,8 +168,8 @@ export class DataStack extends Stack {
       })
     );
 
-     // Agregar permisos básicos para que Lambda pueda ejecutarse y escribir logs
-     role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'));
+    // Agregar permisos básicos para que Lambda pueda ejecutarse y escribir logs
+    /* role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')); */
 
     // Si necesitas que el rol pueda ser asumido por otros servicios AWS, añade esto:
     /*  role.assumeRolePolicy?.addStatements(
