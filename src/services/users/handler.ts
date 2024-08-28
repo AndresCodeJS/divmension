@@ -78,7 +78,7 @@ async function handler(
           const followUserResponse = await unfollowUser(event, docClient);
           response = followUserResponse;
         }
-        if (event.path == "/profile-photo") {
+        if (event.path == "/users/profile-photo") {
           //Dejar de seguir a un usuario
           const followUserResponse = await updateProfilePhoto(event, docClient);
           response = followUserResponse;

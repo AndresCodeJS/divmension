@@ -12,7 +12,7 @@
       "args": ["${relativeFile}"],
       "env": {
         "AWS_REGION": "us-east-1",
-        "TABLE_NAME": "Devmension-0affd27f5153",
+        "TABLE_NAME": "Devmension-12e561930bc7",
         "TABLE_GSI1_NAME": "gsi1",
         "SECRET_KEY": "DIVMENSION_SECRET_PW_KEY",
         "JWT_SECRET": "JWT_SECRET_CODE",

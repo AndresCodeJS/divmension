@@ -178,10 +178,10 @@ console.log(result)
 
 userHandler({
     httpMethod: 'POST',
-    path:'/profile-photo',
-    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDc3MDc0MSwiZXhwIjoxNzI0ODEzOTQxfQ.2M3FvyCGi6kAwgrEJR-DWOtt6DfsQ4qbpCCbLDhB4OQ"},
+    path:'/users/profile-photo',
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI0ODY5MTc0LCJleHAiOjE3MjQ5MTIzNzR9.LnFwU9fx9HLjBYWvfix5m8VjVpG8wJIUi05iwCiJ8o0"},
     body: JSON.stringify({
-        photoUrl: 'https://divmension-0affd27f5153.s3.us-east-1.amazonaws.com/andres/profile-photo.png'
+        photoUrl: 'https://divmension-12e561930bc7.s3.amazonaws.com/juan/profile/1724863730074-wire_side.PNG'
     })
 
 } as any,{} as any).then(result=>{

@@ -27,6 +27,7 @@ export async function updateProfilePhoto(
 
   if (response.statusCode == 200) {
     let loggedUser = JSON.parse(response.body).username;
+    let fullnameUser = JSON.parse(response.body).fullname;
 
     //Actualiza la url de foto de perfil
     const commandUpdateFollowingCounter = new UpdateCommand({
@@ -45,6 +46,52 @@ export async function updateProfilePhoto(
     });
 
     await ddbDocClient.send(commandUpdateFollowingCounter);
+
+    //Actualizar los registros usados en barra de búsqueda del usuario
+
+    let fullnameFixed = fullnameUser.trim().replace(/\s+/g, "."); //reemplaza espacios por puntos
+
+    //Para futuras busquedas por username -----------------------------------------------
+
+    let usernameFullnameMix = loggedUser + "/" + fullnameFixed;
+
+    const updateSearchUsernameCommand = new UpdateCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: {
+        pk: "search",
+        sk: usernameFullnameMix,
+      },
+      UpdateExpression: "SET #attrName = :url",
+      ExpressionAttributeNames: {
+        "#attrName": "photoUrl",
+      },
+      ExpressionAttributeValues: {
+        ":url": photoUrl,
+      },
+    });
+
+    await ddbDocClient.send(updateSearchUsernameCommand);
+
+    //Para futuras busquedas por fullname --------------------------------------------------
+
+    let fullnameUsernameMix = fullnameFixed + "#" + loggedUser; // para busquedas por fullname
+
+    const updateSearchFullnameCommand = new UpdateCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: {
+        pk: "search",
+        sk: fullnameUsernameMix,
+      },
+      UpdateExpression: "SET #attrName = :url",
+      ExpressionAttributeNames: {
+        "#attrName": "photoUrl",
+      },
+      ExpressionAttributeValues: {
+        ":url": photoUrl,
+      },
+    });
+
+    await ddbDocClient.send(updateSearchFullnameCommand);
 
     response = {
       statusCode: 200,

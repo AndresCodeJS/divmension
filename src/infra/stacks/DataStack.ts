@@ -44,7 +44,7 @@ export class DataStack extends Stack {
       bucketName: `divmension-${suffix}`,
       cors: [
         {
-          allowedMethods: [HttpMethods.HEAD, HttpMethods.GET, HttpMethods.PUT],
+          allowedMethods: [HttpMethods.HEAD, HttpMethods.GET, HttpMethods.PUT, HttpMethods.DELETE, HttpMethods.POST],
           allowedOrigins: ["*"],
           allowedHeaders: ["*"],
         },
@@ -68,8 +68,7 @@ export class DataStack extends Stack {
     //Agregarmos politica al bucket para que acepte al rol -----------------------------------
 
     const bucketPolicy = new PolicyStatement({
-      actions: ["s3:PutObject", "s3:PutObjectAcl", "s3:GetObject",  "s3:DeleteObject",  
-        "s3:ListBucket"],
+      actions: ["s3:PutObject", "s3:PutObjectAcl", "s3:GetObject", "s3:DeleteObject"],
       resources: [this.photosBucket.bucketArn + "/*"],
       principals: [
         /* new ServicePrincipal('lambda.amazonaws.com'), */
@@ -77,7 +76,7 @@ export class DataStack extends Stack {
       ],
     });
 
-   /*  bucketPolicy.addCondition("StringLike", {
+    /*  bucketPolicy.addCondition("StringLike", {
       's3:x-amz-content-type': ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
     }); */
 
@@ -161,8 +160,7 @@ export class DataStack extends Stack {
     role.addToPolicy(
       new PolicyStatement({
         effect: Effect.ALLOW,
-        actions: ["s3:PutObject", "s3:GetObject", "s3:ListBucket",  "s3:DeleteObject",  
-          "s3:ListBucket"],
+        actions: ["s3:PutObject", "s3:GetObject", "s3:ListBucket", "s3:DeleteObject"],
         resources: [
           this.photosBucket.bucketArn,
           `${this.photosBucket.bucketArn}/*`,
