@@ -64,16 +64,9 @@ export async function postUserLogin(
 
   let jwt = await auth.signToken(user);
 
-  //TODO Generar JWT TOKEN
-  //Devolver todos los datos para almacenarlos en el storage
-  //Almacenar el JWT en el storage
-
   return {
     statusCode: 200,
     body: JSON.stringify({ user, jwt }),
   };
 
-  /* const response: APIGatewayProxyResult = await Auth.userLogin(username, password) */
-
-  /*  return response */
 }

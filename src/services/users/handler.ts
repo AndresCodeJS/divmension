@@ -16,6 +16,7 @@ import { followUser } from "./FollowUser";
 import { unfollowUser } from "./UnfollowUser";
 import { getS3Credentials } from "./GetS3Credentials";
 import { STSClient } from "@aws-sdk/client-sts";
+import { updateProfilePhoto } from "./UpdateProfilePhoto";
 
 
 const client = new DynamoDBClient({});
@@ -75,6 +76,11 @@ async function handler(
         if (event.path == "/users/unfollow") {
           //Dejar de seguir a un usuario
           const followUserResponse = await unfollowUser(event, docClient);
+          response = followUserResponse;
+        }
+        if (event.path == "/profile-photo") {
+          //Dejar de seguir a un usuario
+          const followUserResponse = await updateProfilePhoto(event, docClient);
           response = followUserResponse;
         }
 

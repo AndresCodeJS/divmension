@@ -68,7 +68,8 @@ export class DataStack extends Stack {
     //Agregarmos politica al bucket para que acepte al rol -----------------------------------
 
     const bucketPolicy = new PolicyStatement({
-      actions: ["s3:PutObject", "s3:PutObjectAcl", "s3:GetObject"],
+      actions: ["s3:PutObject", "s3:PutObjectAcl", "s3:GetObject",  "s3:DeleteObject",  
+        "s3:ListBucket"],
       resources: [this.photosBucket.bucketArn + "/*"],
       principals: [
         /* new ServicePrincipal('lambda.amazonaws.com'), */
@@ -160,7 +161,8 @@ export class DataStack extends Stack {
     role.addToPolicy(
       new PolicyStatement({
         effect: Effect.ALLOW,
-        actions: ["s3:PutObject", "s3:GetObject", "s3:ListBucket"],
+        actions: ["s3:PutObject", "s3:GetObject", "s3:ListBucket",  "s3:DeleteObject",  
+          "s3:ListBucket"],
         resources: [
           this.photosBucket.bucketArn,
           `${this.photosBucket.bucketArn}/*`,

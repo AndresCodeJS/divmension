@@ -165,11 +165,25 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }) */
 
 //Obtener credenciales 
-userHandler({
+/* userHandler({
 httpMethod: 'GET',
 path:'/users/s3-credentials',
-headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDYzNDc0NCwiZXhwIjoxNzI0Njc3OTQ0fQ.EQf9U5cxBpdc4Hm1SPOdAHfGAgNKHOt3iOldYErspZI"},
+headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDc3MDc0MSwiZXhwIjoxNzI0ODEzOTQxfQ.2M3FvyCGi6kAwgrEJR-DWOtt6DfsQ4qbpCCbLDhB4OQ"},
 } as any,{} as any).then(result=>{
 console.log(result)
 }) 
+ */
 
+//Actualizar foto de perfil
+
+userHandler({
+    httpMethod: 'POST',
+    path:'/profile-photo',
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDc3MDc0MSwiZXhwIjoxNzI0ODEzOTQxfQ.2M3FvyCGi6kAwgrEJR-DWOtt6DfsQ4qbpCCbLDhB4OQ"},
+    body: JSON.stringify({
+        photoUrl: 'https://divmension-0affd27f5153.s3.us-east-1.amazonaws.com/andres/profile-photo.png'
+    })
+
+} as any,{} as any).then(result=>{
+    console.log(result)
+})

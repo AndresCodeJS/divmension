@@ -73,6 +73,10 @@ export class ApiStack extends Stack {
         //Obtiene credenciales temporales para poder cargar fotos a s3
         const s3CredentialsResource = userResource.addResource('s3-credentials', optionsWithCors)
         s3CredentialsResource.addMethod('GET', props.usersLambdaIntegration)
+
+         //Actualiza la foto de perfil
+         const updateProfilePhotoResource = userResource.addResource('profile-photo', optionsWithCors)
+         updateProfilePhotoResource.addMethod('POST', props.usersLambdaIntegration)
     }
 
 }
