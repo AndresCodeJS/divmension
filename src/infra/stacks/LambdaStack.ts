@@ -40,7 +40,7 @@ export class LambdaStack extends Stack {
         REGION: "us-east-1",
       },
       bundling: {
-        nodeModules: ["bcryptjs", "jsonwebtoken"],
+        nodeModules: ["bcryptjs", "jsonwebtoken", "ulid"],
       },
       timeout: Duration.seconds(6),
     });

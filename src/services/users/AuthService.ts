@@ -25,7 +25,7 @@ export class AuthService {
     if (!token) {
       return {
         statusCode: 401,
-        body: JSON.stringify({ message: "Missing Token" }),
+        body: JSON.stringify({ type: "MISSING_TOKEN", message: 'Missing Token'}),
       };
     }
 
@@ -35,7 +35,7 @@ export class AuthService {
       if (!decodedToken) {
         return {
           statusCode: 401,
-          body: JSON.stringify("Invalid token"),
+          body: JSON.stringify({ type: "INVALID_TOKEN", message: 'Invalid Token'}),
         };
       } else {
         let user = {
@@ -50,10 +50,19 @@ export class AuthService {
         };
       }
     } catch (error) {
-      return {
+      let response = {
         statusCode: 401,
         body: JSON.stringify({ message: error.message }),
       };
+
+      if(error.name == "TokenExpiredError"){
+        response = {
+          statusCode: 401,
+          body: JSON.stringify({ type: "EXPIRED_TOKEN", message: 'Expired Token'}),
+        };
+      }
+
+      return response
     }
   }
 }

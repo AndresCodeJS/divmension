@@ -176,12 +176,27 @@ console.log(result)
 
 //Actualizar foto de perfil
 
-userHandler({
+/* userHandler({
     httpMethod: 'POST',
     path:'/users/profile-photo',
-    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI0ODY5MTc0LCJleHAiOjE3MjQ5MTIzNzR9.LnFwU9fx9HLjBYWvfix5m8VjVpG8wJIUi05iwCiJ8o0"},
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDU1NDU1MiwiZXhwIjoxNzI0NTk3NzUyfQ.U__kqE8dvKgYAAzzyyw9NUZx3E-IVcEOvyJnNEjpfXs"},
     body: JSON.stringify({
         photoUrl: 'https://divmension-12e561930bc7.s3.amazonaws.com/juan/profile/1724863730074-wire_side.PNG'
+    })
+
+} as any,{} as any).then(result=>{
+    console.log(result)
+})
+ */
+
+userHandler({
+    httpMethod: 'POST',
+    path:'/posts/create',
+    headers: {Authorization:"eJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI1MjE4NzIyLCJleHAiOjE3MjUyNjE5MjJ9.yNKOcgAbRk_9_lyH1Q5Zd790qo2V-Tc8dHFwEeGIRn4"},
+    body: JSON.stringify({
+        
+        description: ' esta es la desc 3',
+        imageUrl: 'https://divmension-12e561930bc7.s3.amazonaws.com/juan/profile/1724863730074-wire_side.PNG',
     })
 
 } as any,{} as any).then(result=>{

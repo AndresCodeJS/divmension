@@ -77,6 +77,15 @@ export class ApiStack extends Stack {
          //Actualiza la foto de perfil
          const updateProfilePhotoResource = userResource.addResource('profile-photo', optionsWithCors)
          updateProfilePhotoResource.addMethod('POST', props.usersLambdaIntegration)
+
+        
+        //RUTA DE POST --------------------------------------------------------
+
+        const postResource = api.root.addResource('posts', optionsWithCors)
+        
+        //Registro de Usuario
+        const createPostResource = postResource.addResource('create', optionsWithCors)
+        createPostResource.addMethod('POST', props.usersLambdaIntegration)
     }
 
 }

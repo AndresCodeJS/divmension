@@ -17,7 +17,7 @@ import { unfollowUser } from "./UnfollowUser";
 import { getS3Credentials } from "./GetS3Credentials";
 import { STSClient } from "@aws-sdk/client-sts";
 import { updateProfilePhoto } from "./UpdateProfilePhoto";
-
+import { createPost } from "../posts/CreatePost";
 
 const client = new DynamoDBClient({});
 
@@ -39,7 +39,7 @@ async function handler(
           const getUserRefreshPage = await getUserRefresh(event);
           response = getUserRefreshPage;
         }
-       
+
         if (event.path.startsWith("/users/search/")) {
           //Obtiene las coincidencias de usuarios escritos en la barra de busqueda
           const getUserRefreshPage = await getUsersBySearch(event, docClient);
@@ -47,17 +47,19 @@ async function handler(
         }
         if (event.path.startsWith("/users/profile/")) {
           //Obtiene los datos del usuario usando el username
-          const getUserProfile = await getProfile(event,docClient)
+          const getUserProfile = await getProfile(event, docClient);
           response = getUserProfile;
         }
         if (event.path.startsWith("/users/s3-credentials")) {
           //Obtiene los datos del usuario usando el username
-          const s3Credentials = await getS3Credentials(event,sts)
+          const s3Credentials = await getS3Credentials(event, sts);
           response = s3Credentials;
         }
         break;
 
       case "POST":
+        //USERS ---------------------------------------
+
         if (event.path == "/users/create") {
           //Registro de Usuario
           const postResponse = await createUser(event, docClient);
@@ -84,6 +86,13 @@ async function handler(
           response = followUserResponse;
         }
 
+        // POSTS ----------------------------------
+
+        if (event.path == "/posts/create") {
+          //Crea un nuevo post
+          response = await createPost(event, docClient);
+        }
+
         break;
       case "PUT":
         /*  const updateResponse = await updatePlaces(event, ddbClient)
@@ -100,21 +109,21 @@ async function handler(
   } catch (error) {
     /* console.log(error) */
     if (error instanceof MissingFieldError) {
-      return {
+      response = {
         statusCode: 400,
         body: JSON.stringify({ message: error.message }),
       };
-    }
-    if (error instanceof JsonError) {
-      return {
+    } else if (error instanceof JsonError) {
+      response = {
         statusCode: 400,
         body: JSON.stringify({ message: error.message }),
       };
+    } else {
+      response = {
+        statusCode: 500,
+        body: JSON.stringify({ error: error.message }),
+      };
     }
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-    };
   }
 
   addCorsHeader(response);

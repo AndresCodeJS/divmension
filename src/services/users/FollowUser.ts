@@ -1,7 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { GetCommand, PutCommand, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import bcrypt from "bcryptjs";
+import {  PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { AuthService } from "./AuthService";
 
 const auth = new AuthService();
@@ -17,7 +16,6 @@ export async function followUser(
   let response = await auth.verifyToken(event); // Autenticacion de usuario
 
   if (response.statusCode == 200) {
-    console.log("Token valido");
 
     let loggedUser = JSON.parse(response.body).username;
 
