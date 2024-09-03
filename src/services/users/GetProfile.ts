@@ -1,9 +1,29 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import { AuthService } from "./AuthService";
 
 const auth = new AuthService();
+
+interface IPost {
+  username: string,
+  postId: string,
+  description: string,
+  timeStamp: number
+  likesQuantity: number,
+  commentsQuantity: number ,
+}
+
+interface IUser {
+      username: string,
+      fullname: string,
+      photoUrl: string,
+      followers: number,
+      following: number,
+      postCounter: number,
+      posts: IPost[]
+}
 
 export async function getProfile(
   event: APIGatewayProxyEvent,
@@ -46,7 +66,7 @@ export async function getProfile(
       }
     }
 
-    //Recupera eñ numero de seguidores, seguidos y posts .....................
+    //Recupera el numero de seguidores, seguidos y posts .....................
 
     const getCounterCommand = new GetCommand({
       TableName: process.env.TABLE_NAME,
@@ -58,17 +78,77 @@ export async function getProfile(
 
     const getCounter = await ddbDocClient.send(getCounterCommand);
 
-    const { followers, following, posts } = getCounter.Item;
+    //Recupera todos los posts publicados por el usuario (TODO realizar paginación)
+    const getPostsCommand = new QueryCommand({
+      TableName: process.env.TABLE_NAME,
+      KeyConditionExpression: "pk = :pk",
+      ExpressionAttributeValues: {
+        ":pk": `${usernameParam}#post`,
+      },
+    });
+
+    const getPosts = await ddbDocClient.send(getPostsCommand);
+
+    //Obtiene la cantidad de likes y comentarios por post
+
+    let posts: IPost[] = [];
+
+    if (getPosts.Items.length) {
+      let postQueries = getPosts.Items.map((post) => {
+        let getPostInfo = async () => {
+          //Obtiene cantidad de likes
+          const getLikeQuantityCommand = new GetCommand({
+            TableName: process.env.TABLE_NAME,
+            Key: {
+              pk: `${post.sk}#likecount`,
+              sk: "count",
+            },
+          });
+
+          const likesQuantity = await ddbDocClient.send(getLikeQuantityCommand);
+
+          //Obtiene cantidad de comentarios
+          const getCommentQuantityCommand = new GetCommand({
+            TableName: process.env.TABLE_NAME,
+            Key: {
+              pk: `${post.sk}#commentcount`,
+              sk: "count",
+            },
+          });
+
+          const commentsQuantity = await ddbDocClient.send(
+            getCommentQuantityCommand
+          );
+
+          return {
+            username: post.pk.split("#")[0],
+            postId: post.sk,
+            description: post.description,
+            timeStamp: post.timeStamp,
+            likesQuantity: likesQuantity.Item.quantity,
+            commentsQuantity: commentsQuantity.Item.quantity ,
+          };
+        };
+
+        return getPostInfo();
+      });
+
+      posts = await Promise.all(postQueries);
+
+    }
+
+    const { followers, following, posts: postCounter } = getCounter.Item;
 
     const { pk: username, fullname, photoUrl } = getUserProfile.Item;
 
-    let user = {
+    let user: IUser = {
       username,
       fullname: fullname.replace(/\b\w/g, (char) => char.toUpperCase()), //Transforma a mayusculas las primeras letras del nombre
       photoUrl,
       followers,
       following,
-      posts,
+      postCounter,
+      posts
     };
 
     return {

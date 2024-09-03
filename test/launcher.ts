@@ -127,15 +127,15 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     console.log(result)
 }) */
 
-// Obtener informacion de un usuario
-/* userHandler({
+// OBTENER PERFIL USUARIO
+userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
     headers: {Authorization:null},
-    pathParameters:{username: 'juan'}
+    pathParameters:{username: 'andres'}
 } as any,{} as any).then(result=>{
     console.log(result)
-}) */
+})
 
 //Seguir a un usuario
 /* userHandler({
@@ -189,7 +189,8 @@ console.log(result)
 })
  */
 
-userHandler({
+// CREACON POSTS
+/* userHandler({
     httpMethod: 'POST',
     path:'/posts/create',
     headers: {Authorization:"eJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI1MjE4NzIyLCJleHAiOjE3MjUyNjE5MjJ9.yNKOcgAbRk_9_lyH1Q5Zd790qo2V-Tc8dHFwEeGIRn4"},
@@ -202,3 +203,4 @@ userHandler({
 } as any,{} as any).then(result=>{
     console.log(result)
 })
+ */
