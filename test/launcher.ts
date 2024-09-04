@@ -72,7 +72,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     httpMethod: 'POST',
     path:'/users/emailcode',
     body: JSON.stringify({
-        username: 'shotsand6',
+        username: 'shotsand6',placeEn
         emailCode: '046887'
     })
 } as any,{} as any).then(result=>{

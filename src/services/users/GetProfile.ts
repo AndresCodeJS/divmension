@@ -85,6 +85,7 @@ export async function getProfile(
       ExpressionAttributeValues: {
         ":pk": `${usernameParam}#post`,
       },
+      ScanIndexForward: false // para obtener de los registros mas nuevos a los mas viejos
     });
 
     const getPosts = await ddbDocClient.send(getPostsCommand);
@@ -125,6 +126,7 @@ export async function getProfile(
             postId: post.sk,
             description: post.description,
             timeStamp: post.timeStamp,
+            imageUrl: post.imageUrl,
             likesQuantity: likesQuantity.Item.quantity,
             commentsQuantity: commentsQuantity.Item.quantity ,
           };
