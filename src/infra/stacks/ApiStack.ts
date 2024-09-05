@@ -86,6 +86,14 @@ export class ApiStack extends Stack {
         //Registro de Usuario
         const createPostResource = postResource.addResource('create', optionsWithCors)
         createPostResource.addMethod('POST', props.usersLambdaIntegration)
+
+        //Obtener los posts paginados de un usuario
+        const postsByUserResource = postResource.addResource('user', optionsWithCors)
+        const usernameParamResource = postsByUserResource.addResource('{username}', optionsWithCors)
+        const lastPostIdParamResource = usernameParamResource.addResource('{lastPostId}', optionsWithCors)
+
+        lastPostIdParamResource.addMethod('GET', props.usersLambdaIntegration)
+
     }
 
 }

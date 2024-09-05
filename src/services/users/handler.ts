@@ -18,6 +18,7 @@ import { getS3Credentials } from "./GetS3Credentials";
 import { STSClient } from "@aws-sdk/client-sts";
 import { updateProfilePhoto } from "./UpdateProfilePhoto";
 import { createPost } from "../posts/CreatePost";
+import { getPostsByUser } from "../posts/GetPostsByUser";
 
 const client = new DynamoDBClient({});
 
@@ -54,6 +55,12 @@ async function handler(
           //Obtiene los datos del usuario usando el username
           const s3Credentials = await getS3Credentials(event, sts);
           response = s3Credentials;
+        }
+
+        //POSTS -----------------------------------------------------
+        if (event.path.startsWith("/posts/user")) {
+          //Obtiene los posts paginados de un usuario
+          response = await getPostsByUser(event, docClient);
         }
         break;
 

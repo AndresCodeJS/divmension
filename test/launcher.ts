@@ -128,11 +128,21 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }) */
 
 // OBTENER PERFIL USUARIO
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
     headers: {Authorization:null},
     pathParameters:{username: 'andres'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+}) */
+
+// OBTERNER LOS POSTS DE UN USUARIO USANDO PAGINACION
+userHandler({
+    httpMethod: 'GET',
+    path:'/posts/user/',
+    headers: {Authorization:null},
+    pathParameters:{username: 'andres', lastPostId: '01J6QXK2D1YK68VNRHV2G3T38M'}
 } as any,{} as any).then(result=>{
     console.log(result)
 })

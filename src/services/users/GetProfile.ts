@@ -22,7 +22,8 @@ interface IUser {
       followers: number,
       following: number,
       postCounter: number,
-      posts: IPost[]
+      posts: IPost[],
+      lastPostKey: any
 }
 
 export async function getProfile(
@@ -79,13 +80,16 @@ export async function getProfile(
     const getCounter = await ddbDocClient.send(getCounterCommand);
 
     //Recupera todos los posts publicados por el usuario (TODO realizar paginación)
+
     const getPostsCommand = new QueryCommand({
       TableName: process.env.TABLE_NAME,
       KeyConditionExpression: "pk = :pk",
       ExpressionAttributeValues: {
         ":pk": `${usernameParam}#post`,
       },
-      ScanIndexForward: false // para obtener de los registros mas nuevos a los mas viejos
+      Limit: 9,
+      ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos
+      /* ExclusiveStartKey : */ 
     });
 
     const getPosts = await ddbDocClient.send(getPostsCommand);
@@ -150,7 +154,8 @@ export async function getProfile(
       followers,
       following,
       postCounter,
-      posts
+      posts,
+      lastPostKey: getPosts.LastEvaluatedKey || ''
     };
 
     return {
