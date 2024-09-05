@@ -89,8 +89,8 @@ export class ApiStack extends Stack {
 
         //Obtener los posts paginados de un usuario
         const postsByUserResource = postResource.addResource('user', optionsWithCors)
-        const usernameParamResource = postsByUserResource.addResource('{username}', optionsWithCors)
-        const lastPostIdParamResource = usernameParamResource.addResource('{lastPostId}', optionsWithCors)
+        const usernameParamResource = postsByUserResource.addResource('{pkParam}', optionsWithCors)
+        const lastPostIdParamResource = usernameParamResource.addResource('{skParam}', optionsWithCors)
 
         lastPostIdParamResource.addMethod('GET', props.usersLambdaIntegration)
 
