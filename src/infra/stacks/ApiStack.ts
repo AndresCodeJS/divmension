@@ -57,7 +57,7 @@ export class ApiStack extends Stack {
         const searchParameterResource = searchBarResource.addResource('{userString}', optionsWithCors)
         searchParameterResource.addMethod('GET', props.usersLambdaIntegration)
 
-        //Obtiene informacion del usuario a partir del username
+        //Obtiene informacion del usuario a partir del username para cargar el perfil
         const userProfileResource = userResource.addResource('profile', optionsWithCors)
         const getUserProfileResource = userProfileResource.addResource('{username}', optionsWithCors)
         getUserProfileResource.addMethod('GET', props.usersLambdaIntegration)
@@ -91,8 +91,13 @@ export class ApiStack extends Stack {
         const postsByUserResource = postResource.addResource('user', optionsWithCors)
         const usernameParamResource = postsByUserResource.addResource('{pkParam}', optionsWithCors)
         const lastPostIdParamResource = usernameParamResource.addResource('{skParam}', optionsWithCors)
-
         lastPostIdParamResource.addMethod('GET', props.usersLambdaIntegration)
+
+        //Obtiene los detalles de un post por el ID
+        const postDetailsResource = postResource.addResource('details', optionsWithCors)
+        const usernamePostResource = postDetailsResource.addResource('{username}', optionsWithCors)
+        const postIdParamResource = usernamePostResource.addResource('{postId}', optionsWithCors)
+        postIdParamResource.addMethod('GET', props.usersLambdaIntegration)
 
     }
 
