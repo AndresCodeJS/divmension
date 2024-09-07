@@ -19,6 +19,7 @@ import { STSClient } from "@aws-sdk/client-sts";
 import { updateProfilePhoto } from "./UpdateProfilePhoto";
 import { createPost } from "../posts/CreatePost";
 import { getPostsByUser } from "../posts/GetPostsByUser";
+import { getPostDetails } from "../posts/GetPostDetails";
 
 const client = new DynamoDBClient({});
 
@@ -61,6 +62,11 @@ async function handler(
         if (event.path.startsWith("/posts/user")) {
           //Obtiene los posts paginados de un usuario
           response = await getPostsByUser(event, docClient);
+        }
+
+        if (event.path.startsWith("/posts/details")) {
+          //Obtiene los detalles de un post por ID
+          response = await getPostDetails(event, docClient);
         }
         break;
 

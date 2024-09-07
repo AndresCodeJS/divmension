@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
-/* import { AuthService } from "./AuthService";
+import { AuthService } from "../users/AuthService";
 
-const auth = new AuthService(); */
+
+const auth = new AuthService();
 
 interface IPost {
   username: string;
@@ -16,12 +16,12 @@ interface IPost {
   imageUrl: string;
 }
 
-export async function getPostsByUser(
+export async function getPostDetails(
   event: APIGatewayProxyEvent,
   ddbDocClient: DynamoDBClient
 ): Promise<APIGatewayProxyResult> {
-  const username = event.pathParameters?.pkParam;
-  const postId = event.pathParameters?.skParam;
+  const username = event.pathParameters?.username;
+  const postId = event.pathParameters?.postId;
 
   if (!username || !postId) {
     return {
@@ -42,6 +42,15 @@ export async function getPostsByUser(
 
     const getPost = await ddbDocClient.send(getPostCommand);
 
+    if(getPost.Item){
+
+    let response = await auth.verifyToken(event);
+
+    //Extrae el usuario para verificar si ha dado me gusta al post
+    let loggedUser = JSON.parse(response.body).username;
+
+    //TODO realizar la consulta a la tabla por pk postId#likelist sk username
+    
     //Obtiene cantidad de likes del post
     const getLikeQuantityCommand = new GetCommand({
       TableName: process.env.TABLE_NAME,
@@ -84,6 +93,12 @@ export async function getPostsByUser(
       statusCode: 200,
       body: JSON.stringify(post),
     };
+}else{
+    return {
+        statusCode: 401,
+        body: JSON.stringify({type:'NOT_EXISTS',message:'Post Not found'}),
+      };
+}
   } catch (err) {
     return {
       statusCode: 401,

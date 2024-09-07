@@ -138,11 +138,21 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }) */
 
 // OBTERNER LOS POSTS DE UN USUARIO USANDO PAGINACION
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/posts/user/',
     headers: {Authorization:null},
     pathParameters:{pkParam: 'andres', skParam: '01J6QXK2D1YK68VNRHV2G3T38M'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+})*/
+
+//OBTENER UN POST POR ID
+userHandler({
+    httpMethod: 'GET',
+    path:'/posts/details/',
+    headers: {Authorization:null},
+    pathParameters:{username: 'andres', postId: '01J6QXK2D1YK68VNRHV2G3T38M'}
 } as any,{} as any).then(result=>{
     console.log(result)
 })
