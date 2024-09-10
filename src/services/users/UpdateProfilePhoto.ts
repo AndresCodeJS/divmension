@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { GetCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import bcrypt from "bcryptjs";
 import { AuthService } from "./AuthService";
 
@@ -46,6 +46,19 @@ export async function updateProfilePhoto(
     });
 
     await ddbDocClient.send(commandUpdateFollowingCounter);
+
+    //CREA O ACTUALIZA EL REGISTRO EL REGISTRO QUE SOLO CONTIENE LA FOTO DE PERFIL
+
+    const photoUrlCommand = new PutCommand({
+      TableName: process.env.TABLE_NAME,
+      Item: {
+        pk: loggedUser,
+        sk: 'photo',
+        url: photoUrl
+      }
+    });
+
+    await ddbDocClient.send(photoUrlCommand);
 
     //Actualizar los registros usados en barra de búsqueda del usuario
 

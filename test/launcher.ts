@@ -198,7 +198,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }); */
 
 //QUITAR LIKE A UN POST
-userHandler(
+/* userHandler(
     {
       httpMethod: "POST",
       path: "/posts/unlike",
@@ -214,6 +214,27 @@ userHandler(
   ).then((result) => {
     console.log(result);
   });
+ */
+  //REALIZAR COMENTARIO A POST
+  userHandler(
+    {
+      httpMethod: "POST",
+      path: "/posts/comment",
+      headers: {
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiZnVsbG5hbWUiOiJkYXZpZCBzbmFjaGV6IiwiZW1haWwiOiJkYXZpZEBnbWFpbC5jb20iLCJpYXQiOjE3MjU5ODUzMDAsImV4cCI6MTcyNjAyODUwMH0.hlKDk6brcCmCe5d7P4Ul5A8ptAU3MGOik1F5aa2CGpw",
+      },
+      body: JSON.stringify({
+        postId: "01J774YBJ3XPXM2WCKKBEDC1VJ",
+        content: "Que buena foto de perfil"
+      }),
+    } as any,
+    {} as any
+  ).then((result) => {
+    console.log(result);
+  });
+
+
 
 //Obtener credenciales
 /* userHandler({

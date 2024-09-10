@@ -106,6 +106,10 @@ export class ApiStack extends Stack {
         //Quitar me gusta a un post
         const postUnlikeResource = postResource.addResource('unlike', optionsWithCors)
         postUnlikeResource.addMethod('POST', props.usersLambdaIntegration)
+
+        //Comentar un post
+        const postCommentResource = postResource.addResource('comment', optionsWithCors)
+        postCommentResource.addMethod('POST', props.usersLambdaIntegration)
     }
 
 }

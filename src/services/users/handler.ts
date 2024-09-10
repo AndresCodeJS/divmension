@@ -22,6 +22,7 @@ import { getPostsByUser } from "../posts/GetPostsByUser";
 import { getPostDetails } from "../posts/GetPostDetails";
 import { likePost } from "../posts/LikePost";
 import { unlikePost } from "../posts/UnlikePost";
+import { postComment } from "../posts/PostComment";
 
 const client = new DynamoDBClient({});
 
@@ -117,6 +118,11 @@ async function handler(
         if (event.path == "/posts/unlike") {
           //Dar like a un usuario
           response = await unlikePost(event, docClient);
+        }
+
+        if (event.path == "/posts/comment") {
+          //Dar like a un usuario
+          response = await postComment(event, docClient);
         }
 
         break;
