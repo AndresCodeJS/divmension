@@ -99,6 +99,13 @@ export class ApiStack extends Stack {
         const postIdParamResource = usernamePostResource.addResource('{postId}', optionsWithCors)
         postIdParamResource.addMethod('GET', props.usersLambdaIntegration)
 
+        //Dar me gusta a un post
+        const postLikeResource = postResource.addResource('like', optionsWithCors)
+        postLikeResource.addMethod('POST', props.usersLambdaIntegration)
+
+        //Quitar me gusta a un post
+        const postUnlikeResource = postResource.addResource('unlike', optionsWithCors)
+        postUnlikeResource.addMethod('POST', props.usersLambdaIntegration)
     }
 
 }

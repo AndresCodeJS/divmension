@@ -125,6 +125,29 @@ export async function getProfile(
             getCommentQuantityCommand
           );
 
+          //VERIFICA SI EL POST TIENE ME GUSTA DEL USUARIO LOGUEADO
+
+          let isLiked =false
+
+          if(loggedUser){
+
+            const likeCommand = new GetCommand({
+              TableName: process.env.TABLE_NAME,
+              Key: {
+                pk: `${post.sk}#likelist`,
+                sk: loggedUser,
+              },
+            });
+  
+            const getLike = await ddbDocClient.send(
+              likeCommand
+            );
+
+            if(getLike.Item){
+              isLiked = true
+            }
+          }
+
           return {
             username: post.pk.split("#")[0],
             postId: post.sk,
@@ -133,6 +156,7 @@ export async function getProfile(
             imageUrl: post.imageUrl,
             likesQuantity: likesQuantity.Item.quantity,
             commentsQuantity: commentsQuantity.Item.quantity ,
+            isLiked
           };
         };
 

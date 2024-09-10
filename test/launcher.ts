@@ -12,7 +12,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     console.log(result)
 })  */
 
-//Obtener todos los registros 
+//Obtener todos los registros
 /* handler({
     httpMethod: 'GET',
 } as any,{} as any)
@@ -50,7 +50,6 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     console.log(result)
 }) */
 
-
 //###############################################################
 
 //Crear un usuario
@@ -79,7 +78,6 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     console.log(result)
 }) */
 
-
 //Creacion de Usuario Divmension
 /* userHandler({
     httpMethod: 'POST',
@@ -107,8 +105,6 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     console.log(result)
 }) */
 
-
-
 //Refrescar pagina
 /* userHandler({
     httpMethod: 'GET',
@@ -131,7 +127,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 /* userHandler({
     httpMethod: 'GET',
     path:'/users/profile/',
-    headers: {Authorization:null},
+    headers: {Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI1ODkxNzYxLCJleHAiOjE3MjU5MzQ5NjF9.Ps_dj7W3Pp8a_FgQadeuNteJLmWUiFXAJTdWzU5Mx14'},
     pathParameters:{username: 'andres'}
 } as any,{} as any).then(result=>{
     console.log(result)
@@ -148,14 +144,14 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 })*/
 
 //OBTENER UN POST POR ID
-userHandler({
+/* userHandler({
     httpMethod: 'GET',
     path:'/posts/details/',
     headers: {Authorization:null},
     pathParameters:{username: 'andres', postId: '01J6QXK2D1YK68VNRHV2G3T38M'}
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 //Seguir a un usuario
 /* userHandler({
@@ -170,7 +166,6 @@ userHandler({
     console.log(result)
 }) */
 
-
 //Dejar de seguir a un usuario
 /* userHandler({
     httpMethod: 'POST',
@@ -184,7 +179,43 @@ userHandler({
     console.log(result)
 }) */
 
-//Obtener credenciales 
+//DAR LIKE A UN POST
+/* userHandler(
+  {
+    httpMethod: "POST",
+    path: "/posts/like",
+    headers: {
+      Authorization:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI1ODkxNzYxLCJleHAiOjE3MjU5MzQ5NjF9.Ps_dj7W3Pp8a_FgQadeuNteJLmWUiFXAJTdWzU5Mx14",
+    },
+    body: JSON.stringify({
+      postId: "01J774YBJ3XPXM2WCKKBEDC1VJ",
+    }),
+  } as any,
+  {} as any
+).then((result) => {
+  console.log(result);
+}); */
+
+//QUITAR LIKE A UN POST
+userHandler(
+    {
+      httpMethod: "POST",
+      path: "/posts/unlike",
+      headers: {
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwiaWF0IjoxNzI1OTA2OTE4LCJleHAiOjE3MjU5NTAxMTh9.WgnsMRdj_agaHxHv4x5XkFf1csTIfppht3p9WNfPZBQ",
+      },
+      body: JSON.stringify({
+        postId: "01J774YBJ3XPXM2WCKKBEDC1VJ",
+      }),
+    } as any,
+    {} as any
+  ).then((result) => {
+    console.log(result);
+  });
+
+//Obtener credenciales
 /* userHandler({
 httpMethod: 'GET',
 path:'/users/s3-credentials',
