@@ -154,14 +154,14 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }) */
 
     //OBTENER COMENTARIOS POR POST
-    userHandler({
+/*     userHandler({
     httpMethod: 'GET',
     path:'/posts/comments-list/',
     headers: {Authorization:null},
-    pathParameters:{pkParam: '01J774YBJ3XPXM2WCKKBEDC1VJ', skParam: '01J7EN05BH4RAJ7F3JV7QQT8GF'}
+    pathParameters:{pkParam: '01J774YBJ3XPXM2WCKKBEDC1VJ', skParam: '01J7EJBX2E477X4TE9TDPJN3MD'}
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 //Seguir a un usuario
 /* userHandler({
@@ -258,18 +258,18 @@ console.log(result)
 
 //Actualizar foto de perfil
 
-/* userHandler({
+userHandler({
     httpMethod: 'POST',
     path:'/users/profile-photo',
-    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXMxQGdtYWlsLmNvbSIsImlhdCI6MTcyNDU1NDU1MiwiZXhwIjoxNzI0NTk3NzUyfQ.U__kqE8dvKgYAAzzyyw9NUZx3E-IVcEOvyJnNEjpfXs"},
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiZnVsbG5hbWUiOiJkYXZpZCBzbmFjaGV6IiwiZW1haWwiOiJkYXZpZEBnbWFpbC5jb20iLCJwaG90b1VybCI6Imh0dHBzOi8vZGl2bWVuc2lvbi0xMmU1NjE5MzBiYzcuczMudXMtZWFzdC0xLmFtYXpvbmF3cy5jb20vZGF2aWQvcHJvZmlsZS8xNzI0ODc3ODI5OTU1IiwiaWF0IjoxNzI2MDIwMTkzLCJleHAiOjE3MjYwNjMzOTN9.W_QlIssSaZYqd1xmiwp4BdgdDXK1jtH-BXzRC9cSDJk"},
     body: JSON.stringify({
-        photoUrl: 'https://divmension-12e561930bc7.s3.amazonaws.com/juan/profile/1724863730074-wire_side.PNG'
+        photoUrl: 'https://divmension-12e561930bc7.s3.us-east-1.amazonaws.com/andres/profile/1726004965910'
     })
 
 } as any,{} as any).then(result=>{
     console.log(result)
 })
- */
+
 
 // CREACON POSTS
 /* userHandler({

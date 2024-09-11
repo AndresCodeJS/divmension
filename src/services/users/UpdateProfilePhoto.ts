@@ -29,6 +29,17 @@ export async function updateProfilePhoto(
     let loggedUser = JSON.parse(response.body).username;
     let fullnameUser = JSON.parse(response.body).fullname;
 
+    //GENERACION DE NUEVO TOKEN PARA GUARDAR LA URL DE LA IMAGEN ACTUALIZADA
+
+    let user = {
+      username: loggedUser,
+      fullname: fullnameUser,
+      email: JSON.parse(response.body).email,
+      photoUrl: photoUrl
+    };
+  
+    let jwt = await auth.signToken(user);
+
     //Actualiza la url de foto de perfil
     const commandUpdateFollowingCounter = new UpdateCommand({
       TableName: process.env.TABLE_NAME,
@@ -108,7 +119,7 @@ export async function updateProfilePhoto(
 
     response = {
       statusCode: 200,
-      body: JSON.stringify({ message: "photo updated" }),
+      body: JSON.stringify({ jwt }),
     };
   } else {
     return response;

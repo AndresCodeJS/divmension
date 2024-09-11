@@ -32,7 +32,7 @@ export async function getCommentsByPost(
 
     //RECUPERA COMENTARIOS DE UN POST
 
-    if (!skParam) {
+    if (!skParam || skParam == 'none') {
       // Significa que es primera vez que se consulta por los comentarios del post
       let params = {
         TableName: process.env.TABLE_NAME,
@@ -86,6 +86,7 @@ export async function getCommentsByPost(
             let getImage = await ddbDocClient.send(getImageCommand);
 
             return {
+              commentId:comment.sk,
               user: comment.user,
               imageUrl: getImage.Item.url,
               content: comment.content,
