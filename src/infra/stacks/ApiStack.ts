@@ -110,6 +110,12 @@ export class ApiStack extends Stack {
         //Comentar un post
         const postCommentResource = postResource.addResource('comment', optionsWithCors)
         postCommentResource.addMethod('POST', props.usersLambdaIntegration)
+
+          //Obtener los comentarios paginados de un post
+          const commentsByPostResource = postResource.addResource('comments-list', optionsWithCors)
+          const commentPostIdParamResource = commentsByPostResource.addResource('{pkParam}', optionsWithCors)
+          const lastCommentIdParamResource = commentPostIdParamResource.addResource('{skParam}', optionsWithCors)
+          lastCommentIdParamResource.addMethod('GET', props.usersLambdaIntegration)
     }
 
 }

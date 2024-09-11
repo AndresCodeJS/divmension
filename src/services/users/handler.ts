@@ -23,6 +23,7 @@ import { getPostDetails } from "../posts/GetPostDetails";
 import { likePost } from "../posts/LikePost";
 import { unlikePost } from "../posts/UnlikePost";
 import { postComment } from "../posts/PostComment";
+import { getCommentsByPost } from "../posts/GetCommentsByPost";
 
 const client = new DynamoDBClient({});
 
@@ -67,10 +68,10 @@ async function handler(
           response = await getPostsByUser(event, docClient);
         }
 
-       /*  if (event.path.startsWith("/posts/details")) {
+        if (event.path.startsWith("/posts/comments-list")) {
           //Obtiene los detalles de un post por ID
-          response = await getPostDetails(event, docClient);
-        } */
+          response = await getCommentsByPost(event, docClient);
+        }
 
         break;
 

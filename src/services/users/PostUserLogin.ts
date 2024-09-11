@@ -60,6 +60,7 @@ export async function postUserLogin(
     username: username.toLowerCase(),
     fullname: getUser.Item.fullname,
     email: getUser.Item.email,
+    photoUrl: getUser.Item.photoUrl
   };
 
   let jwt = await auth.signToken(user);

@@ -42,6 +42,7 @@ export class AuthService {
           username: decodedToken.username,
           fullname: decodedToken.fullname,
           email: decodedToken.email,
+          photoUrl: decodedToken.photoUrl
         };
 
         return {

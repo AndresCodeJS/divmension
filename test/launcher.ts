@@ -98,7 +98,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     httpMethod: 'POST',
     path:'/users/login',
     body: JSON.stringify({
-        username: "gomez12",
+        username: "andres",
         password: "1234567*"
     })
 } as any,{} as any).then(result=>{
@@ -152,6 +152,16 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 } as any,{} as any).then(result=>{
     console.log(result)
 }) */
+
+    //OBTENER COMENTARIOS POR POST
+    userHandler({
+    httpMethod: 'GET',
+    path:'/posts/comments-list/',
+    headers: {Authorization:null},
+    pathParameters:{pkParam: '01J774YBJ3XPXM2WCKKBEDC1VJ', skParam: '01J7EN05BH4RAJ7F3JV7QQT8GF'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+})
 
 //Seguir a un usuario
 /* userHandler({
@@ -216,7 +226,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
   });
  */
   //REALIZAR COMENTARIO A POST
-  userHandler(
+ /*  userHandler(
     {
       httpMethod: "POST",
       path: "/posts/comment",
@@ -232,7 +242,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     {} as any
   ).then((result) => {
     console.log(result);
-  });
+  }); */
 
 
 
