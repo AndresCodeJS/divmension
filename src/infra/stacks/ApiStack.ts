@@ -116,6 +116,13 @@ export class ApiStack extends Stack {
           const commentPostIdParamResource = commentsByPostResource.addResource('{pkParam}', optionsWithCors)
           const lastCommentIdParamResource = commentPostIdParamResource.addResource('{skParam}', optionsWithCors)
           lastCommentIdParamResource.addMethod('GET', props.usersLambdaIntegration)
+
+          //Obtener todos los post para la vista home
+          const allPostsResource = postResource.addResource('all', optionsWithCors)
+          const pkParamResource = allPostsResource.addResource('{lastUsername}', optionsWithCors)// ->usado para paginado
+          const skParamResource = pkParamResource.addResource('{lastPostId}', optionsWithCors)// ->usado para paginado
+          skParamResource.addMethod('GET', props.usersLambdaIntegration)
+
     }
 
 }

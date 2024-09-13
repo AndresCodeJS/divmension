@@ -153,6 +153,17 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     console.log(result)
 }) */
 
+    //OBTENER TODOS LOS POSTS
+    userHandler({
+    httpMethod: 'GET',
+    path:'/posts/all/',
+    headers: {Authorization:null},
+    /* pathParameters:{lastUsername: 'andres', lastPostId: '01J6QXK2D1YK68VNRHV2G3T38M'} */
+    pathParameters:{lastUsername: 'none', lastPostId: 'none'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+})
+
     //OBTENER COMENTARIOS POR POST
 /*     userHandler({
     httpMethod: 'GET',
@@ -258,7 +269,7 @@ console.log(result)
 
 //Actualizar foto de perfil
 
-userHandler({
+/* userHandler({
     httpMethod: 'POST',
     path:'/users/profile-photo',
     headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiZnVsbG5hbWUiOiJkYXZpZCBzbmFjaGV6IiwiZW1haWwiOiJkYXZpZEBnbWFpbC5jb20iLCJwaG90b1VybCI6Imh0dHBzOi8vZGl2bWVuc2lvbi0xMmU1NjE5MzBiYzcuczMudXMtZWFzdC0xLmFtYXpvbmF3cy5jb20vZGF2aWQvcHJvZmlsZS8xNzI0ODc3ODI5OTU1IiwiaWF0IjoxNzI2MDIwMTkzLCJleHAiOjE3MjYwNjMzOTN9.W_QlIssSaZYqd1xmiwp4BdgdDXK1jtH-BXzRC9cSDJk"},
@@ -268,7 +279,7 @@ userHandler({
 
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 
 // CREACON POSTS

@@ -2,18 +2,10 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
+import { IPost } from "../shared/models";
 /* import { AuthService } from "./AuthService";
 
 const auth = new AuthService(); */
-
-interface IPost {
-  username: string;
-  postId: string;
-  description: string;
-  timeStamp: number;
-  likesQuantity: number;
-  commentsQuantity: number;
-}
 
 export async function getPostsByUser(
   event: APIGatewayProxyEvent,
