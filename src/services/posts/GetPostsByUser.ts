@@ -3,9 +3,10 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import { IPost } from "../shared/models";
-/* import { AuthService } from "./AuthService";
+import { AuthService } from "../users/AuthService";
 
-const auth = new AuthService(); */
+
+const auth = new AuthService();
 
 export async function getPostsByUser(
   event: APIGatewayProxyEvent,
@@ -40,6 +41,16 @@ export async function getPostsByUser(
 
     const getPosts = await ddbDocClient.send(getPostsCommand);
 
+    //Verifica si hay un user logueado
+    let response = await auth.verifyToken(event);
+
+    let loggedUser = ''
+
+    if (response.statusCode == 200) {
+      //Extrae el usuario para verificar si le ha dado me gusta a los posts obtenidos
+      loggedUser = JSON.parse(response.body).username;
+    }
+
     //Obtiene la cantidad de likes y comentarios por post
 
     let posts: IPost[] = [];
@@ -71,6 +82,29 @@ export async function getPostsByUser(
             getCommentQuantityCommand
           );
 
+           //VERIFICA SI EL POST TIENE ME GUSTA DEL USUARIO LOGUEADO
+
+           let isLiked =false
+
+           if(loggedUser){
+ 
+             const likeCommand = new GetCommand({
+               TableName: process.env.TABLE_NAME,
+               Key: {
+                 pk: `${post.sk}#likelist`,
+                 sk: loggedUser,
+               },
+             });
+   
+             const getLike = await ddbDocClient.send(
+               likeCommand
+             );
+ 
+             if(getLike.Item){
+               isLiked = true
+             }
+           }
+
           return {
             username: post.pk.split("#")[0],
             postId: post.sk,
@@ -79,6 +113,7 @@ export async function getPostsByUser(
             imageUrl: post.imageUrl,
             likesQuantity: likesQuantity.Item.quantity,
             commentsQuantity: commentsQuantity.Item.quantity,
+            isLiked
           };
         };
 
