@@ -65,7 +65,7 @@ export async function postComment(
 
       response = {
         statusCode: 200,
-        body: JSON.stringify({ currentTimestamp }),
+        body: JSON.stringify({ currentTimestamp, commentId }),
       };
     } catch (error) {
       response = {

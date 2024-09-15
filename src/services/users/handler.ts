@@ -24,6 +24,7 @@ import { likePost } from "../posts/LikePost";
 import { unlikePost } from "../posts/UnlikePost";
 import { postComment } from "../posts/PostComment";
 import { getCommentsByPost } from "../posts/GetCommentsByPost";
+import { getAllPosts } from "../posts/GetAllPosts";
 
 const client = new DynamoDBClient({});
 
@@ -71,6 +72,11 @@ async function handler(
         if (event.path.startsWith("/posts/comments-list")) {
           //Obtiene los detalles de un post por ID
           response = await getCommentsByPost(event, docClient);
+        }
+
+        if (event.path.startsWith("/posts/all")) {
+          //Obtiene todos los post para la vista home
+          response = await getAllPosts(event, docClient);
         }
 
         break;

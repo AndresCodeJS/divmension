@@ -157,7 +157,7 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
     userHandler({
     httpMethod: 'GET',
     path:'/posts/all/',
-    headers: {Authorization:null},
+    headers: {Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwicGhvdG9VcmwiOiJodHRwczovL2Rpdm1lbnNpb24tMTJlNTYxOTMwYmM3LnMzLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL2FuZHJlcy9wcm9maWxlLzE3MjYwMDQ5NjU5MTAiLCJpYXQiOjE3MjYyMzM2OTQsImV4cCI6MTcyNjI3Njg5NH0.6boRpfStjg7NsBrR4KuSc-Saec4zYu1D1qUuTjx6piE'},
     /* pathParameters:{lastUsername: 'andres', lastPostId: '01J6QXK2D1YK68VNRHV2G3T38M'} */
     pathParameters:{lastUsername: 'none', lastPostId: 'none'}
 } as any,{} as any).then(result=>{
