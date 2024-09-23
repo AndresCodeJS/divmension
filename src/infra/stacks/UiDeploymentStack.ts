@@ -18,7 +18,7 @@ export class UiDeploymentStack extends Stack {
       bucketName: `divmension-delpoyment-bucket-${suffix}`,
     });
 
-    const uiDir = join(
+   /*  const uiDir = join(
       __dirname,
       "..",
       "..",
@@ -26,6 +26,19 @@ export class UiDeploymentStack extends Stack {
       "..",
       "devmension-frontend-example",
       "dist"
+    ); */
+
+    const uiDir = join(
+      __dirname,
+      "..",
+      "..",
+      "..",
+      "..",
+      "divmension-frontend",
+      "devmension",
+      "dist",
+      "devmension",
+      "browser"
     );
 
     if (!existsSync(uiDir)) {

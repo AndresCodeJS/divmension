@@ -154,25 +154,25 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }) */
 
     //OBTENER TODOS LOS POSTS
-    userHandler({
+  /*   userHandler({
     httpMethod: 'GET',
     path:'/posts/all/',
-    headers: {Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwicGhvdG9VcmwiOiJodHRwczovL2Rpdm1lbnNpb24tMTJlNTYxOTMwYmM3LnMzLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL2FuZHJlcy9wcm9maWxlLzE3MjYwMDQ5NjU5MTAiLCJpYXQiOjE3MjYyMzM2OTQsImV4cCI6MTcyNjI3Njg5NH0.6boRpfStjg7NsBrR4KuSc-Saec4zYu1D1qUuTjx6piE'},
+    headers: {Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwicGhvdG9VcmwiOiJodHRwczovL2Rpdm1lbnNpb24tMTJlNTYxOTMwYmM3LnMzLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL2FuZHJlcy9wcm9maWxlLzE3MjYwMDQ5NjU5MTAiLCJpYXQiOjE3MjYyMzM2OTQsImV4cCI6MTcyNjI3Njg5NH0.6boRpfStjg7NsBrR4KuSc-Saec4zYu1D1qUuTjx6piE'}, */
     /* pathParameters:{lastUsername: 'andres', lastPostId: '01J6QXK2D1YK68VNRHV2G3T38M'} */
-    pathParameters:{lastUsername: 'none', lastPostId: 'none'}
-} as any,{} as any).then(result=>{
-    console.log(result)
-})
-
-    //OBTENER COMENTARIOS POR POST
-/*     userHandler({
-    httpMethod: 'GET',
-    path:'/posts/comments-list/',
-    headers: {Authorization:null},
-    pathParameters:{pkParam: '01J774YBJ3XPXM2WCKKBEDC1VJ', skParam: '01J7EJBX2E477X4TE9TDPJN3MD'}
+/*     pathParameters:{lastUsername: 'none', lastPostId: 'none'}
 } as any,{} as any).then(result=>{
     console.log(result)
 }) */
+
+    //OBTENER COMENTARIOS POR POST
+    userHandler({
+    httpMethod: 'GET',
+    path:'/posts/comments-list/',
+    headers: {Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbmtvIiwiZnVsbG5hbWUiOiJkYW5rbyBzdWFyZXoiLCJlbWFpbCI6ImRhbmtvQGdtYWlsLmNvbSIsImlhdCI6MTcyNzEyMDg3OSwiZXhwIjoxNzI3MTY0MDc5fQ.8iQfDLiMYgVCHpGxB-JXKSRlcN0k8ymLoUF2ujJoKoo'},
+    pathParameters:{pkParam: '01J8F7KD6NV5ZCTXRPWDC7KJ0N', skParam: 'none'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+})
 
 //Seguir a un usuario
 /* userHandler({

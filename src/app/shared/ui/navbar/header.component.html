@@ -1,0 +1,172 @@
+<div
+  class="fixed flex flex-row h-28 w-full rounded-md items-center justify-between"
+>
+  <!-- container to close DROPDPWN or SEARCHBAR -->
+
+  <!--  LOGO -->
+  <div [routerLink]="['/']" class="sm:ml-5 mt-3 ml-3 cursor-pointer">
+    <img src="/divmension_logo.png" alt="Logo" class="w-28 sm:w-40 h-auto" />
+  </div>
+
+  <!-- <div class="fixed h-dvh w-dvw -z-10 bg-yellow"></div> -->
+
+  <!--  SEARCH BAR -->
+  <div class="w-3/4 mx-3 mt-3">
+    <form class="max-w-md mx-auto">
+      <div class="relative">
+        <!-- Icono de lupa -->
+        <div
+          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-heavy dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <!-- Icono Loader -->
+        @if(isLoading){
+
+        <div
+          class="absolute inset-y-0 end-3 flex items-center pointer-events-none"
+        >
+          <svg
+            aria-hidden="true"
+            class="inline w-4 h-4 text-gray-dark animate-spin dark:text-gray-600 fill-gray-heavy"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+        </div>
+        }
+        <input
+          type="text"
+          id="default-search"
+          class="transition ease-in-out duration-300 block w-full min-w-40 h-9 sm:h-10 p-3 ps-10 pe-10 shadow-sm text-sm sm:text-md text-gray-heavy outline-none border-gray-medium rounded-lg searchbar-input placeholder-gray-heavy ring-gray-light focus:placeholder-gray-medium bg-gray-medium focus:ring-gray-light focus:border-gray-light focus:bg-white dark:bg-gray-light dark:border-gray-medium dark:placeholder-gray-medium dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search friends ..."
+          (keydown)="onSearchList($event)"
+          (input)="onSearchInput()"
+          [ngModelOptions]="{ standalone: true }"
+          [(ngModel)]="searchTerm"
+          required
+        />
+
+        <!-- Lista de coincidencias de la barra de busqueda -->
+        <div
+          class="flex flex-col text-md absolute w-full mt-1 bg-white rounded-lg shadow-lg min-h-28 max-h-48 overflow-y-auto p-4"
+          [class.hidden]="closeSearchList"
+        >
+          <app-search-bar-drop-down
+            [closeSearchList]="closeSearchList"
+            [notFound]="notFound"
+            [userList]="userList"
+            (closeSearchBarEmitter)="onClickSearchList($event)"
+          />
+        </div>
+        <!-- } -->
+      </div>
+    </form>
+  </div>
+
+  <!-- OPTIONS -->
+
+  <div class="flex justify-end gap-4 mr-2 md:mr-10 {{store.user().username?'w-2/12':'w-1/12'}} lg:w-2/12">
+    @if(!store.isLoading()){ @if(!store.user().username){
+    <div class="hidden lg:flex gap-4">
+      <button
+        (click)="openLoginForm()"
+        class="font-bold text-black hidden sm:block hover:text-gray-heavy"
+      >
+        Log In
+      </button>
+      <button
+        (click)="openSignForm()"
+        class="font-bold text-black hidden sm:block hover:text-gray-heavy"
+      >
+        Sign Up
+      </button>
+    </div>
+
+    <app-drop-down-menu
+      class="lg:hidden"
+      (onClickMenuEmitter)="onClickMenu($event)"
+    />
+
+    }@else {
+    
+    <app-drop-down-menu (onClickMenuEmitter)="onClickMenu($event)" />
+
+    } }
+  </div>
+
+  <!-- Menu con opciones -->
+  <!-- <app-drop-down-menu
+    class="lg:hidden"
+    (onClickMenuEmitter)="onClickMenu($event)"
+  /> -->
+</div>
+
+<!-- FORMULARIO DE REGISTRO -->
+<div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+    closeSignForm ? 'opacity-0 invisible' : 'opacity-50 visible'
+  }}"
+></div>
+
+<app-register-form
+  (closeSignUpFormEventEmitter)="onClickOut()"
+  (openLoginFormEventEmitter)="openLoginForm()"
+  [closeSignForm]="closeSignForm"
+  class="transition ease-in-out duration-1000 {{
+    closeSignForm ? 'opacity-0 invisible' : 'opacity-100 visible'
+  }}"
+/>
+
+<!-- FORMULARIO DE LOGIN -->
+<div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 {{
+    closeLoginForm ? 'opacity-0 invisible' : 'opacity-50 visible'
+  }}"
+></div>
+
+<app-login-form
+  (closeFormEventEmitter)="onClickOutLoginForm()"
+  (openSignUpFormEventEmitter)="openSignForm()"
+  [closeLoginForm]="closeLoginForm"
+  class="transition ease-in-out duration-1000 {{
+    closeLoginForm ? 'opacity-0 invisible' : 'opacity-100 visible'
+  }}"
+/>
+
+<!-- <div
+  class="fixed bg-black h-dvh w-full transition ease-in-out duration-500 opacity-75 "
+></div>
+
+<app-register-form
+  (closeFormEventEmitter)="onClickOut()"
+  [closeSignForm]="closeSignForm"
+  class="transition ease-in-out duration-1000"
+/> -->
+
+<!-- <div  class="fixed flex bg-black w-1/2 h-1/2  translate-x-10 transition ease-in-out duration-1000 {{closeSignForm?'opacity-0':'opacity-50'}}">
+
+</div> -->

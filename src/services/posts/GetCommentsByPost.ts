@@ -1,7 +1,7 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { QueryCommand, QueryCommandOutput } from "@aws-sdk/lib-dynamodb";
-import { GetCommand } from "@aws-sdk/lib-dynamodb";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { QueryCommand, QueryCommandOutput } from '@aws-sdk/lib-dynamodb';
+import { GetCommand } from '@aws-sdk/lib-dynamodb';
 /* import { AuthService } from "./AuthService";
 
 const auth = new AuthService(); */
@@ -23,7 +23,7 @@ export async function getCommentsByPost(
   if (!pkParam) {
     return {
       statusCode: 401,
-      body: JSON.stringify({ message: "missing parameters" }),
+      body: JSON.stringify({ message: 'missing parameters' }),
     };
   }
 
@@ -36,9 +36,9 @@ export async function getCommentsByPost(
       // Significa que es primera vez que se consulta por los comentarios del post
       let params = {
         TableName: process.env.TABLE_NAME,
-        KeyConditionExpression: "pk = :pk",
+        KeyConditionExpression: 'pk = :pk',
         ExpressionAttributeValues: {
-          ":pk": `${pkParam}#comment`,
+          ':pk': `${pkParam}#comment`,
         },
         Limit: 6,
         ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos
@@ -50,9 +50,9 @@ export async function getCommentsByPost(
       // Ya se consultó anteriormente, y se realiza paginación
       let params = {
         TableName: process.env.TABLE_NAME,
-        KeyConditionExpression: "pk = :pk",
+        KeyConditionExpression: 'pk = :pk',
         ExpressionAttributeValues: {
-          ":pk": `${pkParam}#comment`,
+          ':pk': `${pkParam}#comment`,
         },
         Limit: 6,
         ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos
@@ -79,16 +79,16 @@ export async function getCommentsByPost(
               TableName: process.env.TABLE_NAME,
               Key: {
                 pk: comment.user,
-                sk: "photo",
+                sk: 'photo',
               },
             });
 
             let getImage = await ddbDocClient.send(getImageCommand);
 
             return {
-              commentId:comment.sk,
+              commentId: comment.sk,
               user: comment.user,
-              imageUrl: getImage.Item.url,
+              imageUrl: getImage.Item ? getImage.Item.url : '',
               content: comment.content,
               timeStamp: comment.timeStamp,
             };
@@ -105,16 +105,16 @@ export async function getCommentsByPost(
           statusCode: 200,
           body: JSON.stringify({ comments, lastEvaluatedKey }),
         };
-      }else{
+      } else {
         return {
-            statusCode: 401,
-            body: JSON.stringify({ message: "No comments found" }),
-          };
+          statusCode: 401,
+          body: JSON.stringify({ message: 'No comments found' }),
+        };
       }
     } else {
       return {
         statusCode: 401,
-        body: JSON.stringify({ message: "Unable get comments for post" }),
+        body: JSON.stringify({ message: 'Unable get comments for post' }),
       };
     }
   } catch (err) {

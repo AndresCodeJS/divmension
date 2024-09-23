@@ -1,0 +1,128 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-light;
+}
+
+/* BUTTONS ------------------------------------------------------------------*/
+.button-light {
+  @apply border border-black rounded-md text-black   font-medium
+    transition ease-in-out duration-300;
+}
+
+.button-full {
+  @apply border bg-black border-black rounded-md text-gray-light  px-2 py-1.5 font-medium
+    transition ease-in-out duration-300;
+}
+
+.button-light:hover {
+  @apply text-gray-light
+    bg-gray-hover;
+}
+
+.button-full:hover {
+  @apply bg-gray-hover text-gray-light;
+}
+
+#default-search::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* -------------------------------------------------------------------- */
+
+.backgroundHover {
+  @apply transition ease-in-out duration-300;
+}
+
+.backgroundHover:hover {
+  @apply bg-gray-medium;
+}
+
+.form-input {
+  @apply text-xs border-b border-gray-light px-4 focus:outline-none w-full placeholder-gray-medium 
+  pb-3 pt-2 transition ease-in-out duration-500 focus:border-gray-dark text-gray-heavy
+}
+
+.form-label{
+  @apply flex text-gray-dark text-xs font-normal items-center
+}
+
+@layer components {
+
+   /* Dropdown Menu del Header -----------------------------------------------------------*/
+  .dropdownProfile::before {
+    content: "";
+    position: absolute;
+    top: -0.7rem;
+    right: 1.1rem;
+    width: 20px;
+    height: 20px;
+    transform: rotate(45deg);
+    background-color: white;
+  }
+
+  /* Para ventanas modales register-form y login-form -----------------------------------*/
+  .modal-signup {
+    height: 90%;
+    top: 5%;
+    width: 65%;
+    right: 17%;
+  }
+
+  .modal-login {
+    height: 60%;
+    top: 20%;
+    width: 30%;
+    right: 35%;
+  }
+
+/*   .new-post {
+    bottom: 10%;
+    right: 48.5%;
+  } */
+
+  @media screen and (max-width: 640px) {
+    .modal-signup {
+      width: 80%;
+      right: 10%;
+    }
+ /*    .new-post {
+      right: 43.5%;
+      bottom: 5%;
+    } */
+  }
+
+  @media screen and (min-width: 250px) {
+    .modal-login {
+      width: 80%;
+      right: 10%;
+      height: 60%;
+      top: 15%
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    .modal-login {
+      width: 60%;
+      right: 20%;
+      height: 55%;
+      top: 20%
+    }
+   
+  }
+
+  @media screen and (min-width: 1000px) {
+    .modal-login {
+      width: 40%;
+      right: 30%;
+      height: 65%;
+      top: 17%
+    }
+  }
+
+}
+
+

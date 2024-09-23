@@ -1,0 +1,249 @@
+<div
+  class="fixed flex flex-row justify-center items-center rounded-3xl modal-signup"
+>
+  <div
+    class="hidden lg:flex lg:flex-col lg:justify-between bg-gray-light w-1/2 h-full rounded-l-3xl lg:p-11"
+  >
+    <p class="font-bold text-3xl">Register with your e-mail</p>
+    <div class="hidden flex-row gap-2 lg:flex">
+      <p>Are you a Member?</p>
+      <div class="border-b border-gray-dark hover:border-gray-heavy">
+        <button (click)="openLoginForm()" class="font-bold text-gray-heavy">
+          Log In Now
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex bg-white w-full lg:w-1/2 h-full rounded-2xl lg:rounded-r-3xl lg:rounded-l-none px-10 md:px-16 lg:px-10 py-8 lg:py-14"
+  >
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col w-full items-center rounded-lg justify-between"
+    >
+      <div class="lg:mb-10 lg:hidden">
+        <p class="font-bold text-2xl">Sign Up</p>
+      </div>
+
+      <!-- INPUTS ------------------------------------------->
+
+      <div class="flex flex-col w-full pt-8 lg:pt-0">
+        <!-- USERNAME -->
+        <div class="relative flex flex-col w-full">
+          <!-- Cuando el input está correcto aparece el icono de checked -->
+          <app-checked-icon
+            class="transition ease-in-out duration-500
+          {{
+              !username.invalid && (username.touched || username.dirty)
+                ? 'visible opacity-100'
+                : 'invisible opacity-0'
+            }}"
+          />
+
+          <label class="form-label">USERNAME</label>
+
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="Username"
+            class="form-input"
+            (keydown)="onKeyDown()"
+          />
+          <div class="h-10 text-orange mt-1">
+            @if (username.invalid && (username.touched || username.dirty)){
+            @if(username.errors?.["required"]){
+            <small>*Username is required</small>
+            }@else if(username.errors?.["maxlength"]){
+            <small>*Username can't be longer than 10</small>
+            }@else if(username.errors?.["minlength"]){
+            <small>*Username can't be smaller than 4</small>
+            }@else if(username.errors?.["hasSpace"]){
+            <small>*Username can't contain spaces</small>
+            } @else if(username.errors?.["hasSymbol"]){
+            <small>*Username can't contain symbols</small>
+            } } @if(errors.username){
+            <small>*Username already exists</small>
+            }
+          </div>
+        </div>
+
+        <!-- FULLNAME -->
+        <div class="relative flex flex-col w-full">
+          <!-- Cuando el input está correcto aparece el icono de checked -->
+          <app-checked-icon
+            class="transition ease-in-out duration-500
+          {{
+              !fullname.invalid && (fullname.touched || fullname.dirty)
+                ? 'visible opacity-100'
+                : 'invisible opacity-0'
+            }}"
+          />
+
+          <label class="form-label">FULL NAME</label>
+
+          <input
+            type="text"
+            formControlName="fullname"
+            placeholder="Full Name"
+            class="form-input"
+          />
+          <div class="h-10 text-orange mt-1">
+            @if (fullname.invalid && (fullname.touched || fullname.dirty)){
+            @if(fullname.errors?.["required"]){
+            <small>*Fullname is required</small>
+            }@else if(fullname.errors?.["maxlength"]){
+            <small>*Fullname can't be longer than 30</small>
+            }@else if(fullname.errors?.["minlength"]){
+            <small>*Fullname can't be smaller than 6</small>
+            }@else if(fullname.errors?.["hasSymbol"]){
+            <small>*Fullname can't contain symbols</small>
+            } @else if(fullname.errors?.["hasNumber"]){
+            <small>*Fullname can't contain numbers</small>
+            } }
+          </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="relative flex flex-col w-full">
+          <!-- Cuando el input está correcto aparece el icono de checked -->
+          <app-checked-icon
+            class="transition ease-in-out duration-500
+          {{
+              !email.invalid && (email.touched || email.dirty)
+                ? 'visible opacity-100'
+                : 'invisible opacity-0'
+            }}"
+          />
+
+          <label class="form-label">E-MAIL</label>
+
+          <input
+            type="text"
+            formControlName="email"
+            placeholder="Email"
+            class="form-input"
+            (keydown)="onKeyDown()"
+          />
+          <div class="h-10 text-orange mt-1">
+            @if (email.invalid && (email.touched || email.dirty)){
+            @if(email.errors?.["required"]){
+            <small>*Email is required</small>
+            }@else if(email.errors?.["maxlength"]){
+            <small>*Email can't be longer than 30</small>
+            }@else if(email.errors?.["email"]){
+            <small>*Invalid Email</small>
+            } } @else if(errors.email){
+            <small>*Email already exists</small>
+            }
+          </div>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="relative flex flex-col w-full">
+          <!-- Cuando el input está correcto aparece el icono de checked -->
+          <app-checked-icon
+            class="transition ease-in-out duration-500
+          {{
+              !password.invalid && (password.touched || password.dirty)
+                ? 'visible opacity-100'
+                : 'invisible opacity-0'
+            }}"
+          />
+
+          <label class="form-label">PASSWORD</label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Passowrd"
+            class="form-input"
+          />
+          <div class="flex h-10 text-orange mt-1">
+            @if (password.invalid && (password.touched || password.dirty)){
+            @if(password.errors?.["required"]){
+            <small>*Password is required</small>
+            }@else if(password.errors?.["minlength"]){
+            <small>*Password can't be smaller than 8</small>
+            }@else if(password.errors?.["maxlength"]){
+            <small>*Password can't be smaller than 20</small>
+            }@else if(password.errors?.["hasNotNumber"]){
+            <small>*{{password.errors?.["hasNotNumber"]}}</small>
+            } @else if(password.errors?.["hasNotSymbol"]){
+            <small>*{{password.errors?.["hasNotSymbol"]}}</small>
+            }@else if(password.errors?.["hasSpace"]){
+            <small>*Password can't contain spaces</small>
+            } }
+          </div>
+        </div>
+
+        <!-- REPASSWORD -->
+        <div class="relative flex flex-col w-full">
+          <!-- Cuando el input está correcto aparece el icono de checked -->
+          <app-checked-icon
+            class="transition ease-in-out duration-500
+          {{
+              !repassword.invalid &&
+              (repassword.touched || repassword.dirty) &&
+              !form.errors
+                ? 'visible opacity-100'
+                : 'invisible opacity-0'
+            }}"
+          />
+
+          <label class="form-label">REPEAT PASSWORD</label>
+          <input
+            type="password"
+            class="form-input"
+            formControlName="repassword"
+            placeholder="Repeat Passowrd"
+          />
+          <div class="flex h-7 text-orange mt-1">
+            @if (repassword.touched || repassword.dirty){
+            @if(repassword.errors?.["required"]){
+            <small>*Repeat Password is required</small>
+            }@else if(form.errors?.["diferentPassword"]){
+            <small>*Passwords must be the same</small>
+            } }
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || isLoading || errors.email || errors.username"
+        class="true"
+        class="disabled button-full py-2 w-full {{
+          form.invalid || isLoading || errors.email || errors.username? 'hover:bg-black' : ''
+        }}"
+      >
+        @if(isLoading){
+        <svg
+          aria-hidden="true"
+          class="inline w-4 h-4 text-gray-dark animate-spin dark:text-gray-600 fill-gray-heavy"
+          viewBox="0 0 100 101"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+            fill="currentColor"
+          />
+          <path
+            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+            fill="currentFill"
+          />
+        </svg>
+        }@else { Create Account }
+      </button>
+      <!-- OPEN LOGIN BUTTON -->
+      <div class="flex flex-row gap-2 mt-4 text-xs lg:hidden">
+        <p>Are you a Member?</p>
+        <div class="border-b border-gray-dark hover:border-gray-heavy">
+          <button (click)="openLoginForm()" class="font-bold text-gray-heavy">
+            Log In Now
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

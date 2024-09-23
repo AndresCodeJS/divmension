@@ -1,0 +1,98 @@
+<!-- Boton para desplegar el dropdown ------------------------------------- -->
+<div class="flex mt-3 md:mr-10 mr-3 rounded-xl p-1 w-full justify-end">
+  @if(store.user().username){
+  <app-floating-button />
+  }
+  <button
+    (click)="onClickMenu()"
+    class="flex lg:hidden backgroundHover p-1 rounded-lg"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="size-6 sm:size-8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+      />
+    </svg>
+  </button>
+
+  @if(store.user().username){
+
+  <div class="hidden lg:flex">
+    <div class="mt-3">
+      <p class="font-medium text-gray-heavy">{{ store.user().username }}</p>
+    </div>
+
+    <button (click)="onClickMenu()" class="sm:ml-2">
+      <div class="flex justify-center items-center w-8 h-8 sm:w-12 sm:h-12">
+        <img
+          [src]="store.user().photoUrl || '/sin-perfil.jpg'"
+          alt="Profile"
+          class="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover"
+        />
+      </div>
+    </button>
+  </div>
+  }
+</div>
+<!-- Menu desplegable ---------------------------------------------------->
+@if(!store.user().username){
+<!-- Menu para invitados ------------------------------------------>
+<div
+  [class.hidden]="closeDropDownMenu"
+  class="dropdownProfile flex shadow-md lg:hidden flex-col absolute top-24 right-1 w-36 p-4 rounded-lg bg-white border border-gray-light"
+>
+  <ul class="flex flex-col gap-3">
+    <li>
+      <button
+        id="login"
+        (click)="onClickMenuOptions(login)"
+        class="font-bold text-gray-heavy text-sm"
+      >
+        Log In
+      </button>
+    </li>
+    <li>
+      <button
+        (click)="onClickMenuOptions(signup)"
+        class="font-bold text-gray-heavy text-sm"
+      >
+        Sign Up
+      </button>
+    </li>
+  </ul>
+</div>
+}@else {
+<!-- Menu para usuarios ------------------------------------------>
+<div
+  [class.hidden]="closeDropDownMenu"
+  class="dropdownProfile flex shadow-md flex-col absolute top-24 right-1 lg:right-10 lg:top-28 w-36 p-4 rounded-lg bg-white border border-gray-light"
+>
+  <ul class="flex flex-col gap-3">
+    <li>
+      <button
+        [routerLink]="['/user/profile', store.user().username]"
+        class="font-bold text-gray-heavy text-sm"
+        (click)="onClickMenuOptions('profile')"
+      >
+        My Profile
+      </button>
+    </li>
+    <li>
+      <button
+        (click)="onClickLogOut()"
+        class="font-bold text-gray-heavy text-sm"
+      >
+        Log Out
+      </button>
+    </li>
+  </ul>
+</div>
+}

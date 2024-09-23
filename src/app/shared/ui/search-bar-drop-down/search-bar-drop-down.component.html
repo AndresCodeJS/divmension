@@ -1,0 +1,41 @@
+@if(userList[0].username){
+
+<!-- <div
+  class="text-md absolute w-full mt-1 bg-white rounded-lg shadow-lg max-h-48 overflow-y-auto p-4"
+  [class.hidden]="closeSearchList"
+  #ResultList
+> -->
+  <ul id="results-list" class="flex flex-col gap-3">
+    @for( user of userList; track user.username){ @if(user.username){
+
+    <li>
+      <button
+        class="flex w-full shadow-md pl-2 rounded-md border-gray-medium py-2 gap-1 md:gap-2"
+        [routerLink]="['/user/profile', user.username]"
+        (click)="onClickSearchResult()"
+      >
+        <!-- Foto Perfil -->
+        <div class="flex justify-center items-center">
+          <img [src]="user.photoUrl || '/sin-perfil.jpg'" alt="Logo" class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover shadow-lg" />
+        </div>
+        <!-- Nombre y usuario -->
+        <div class="flex flex-col items-start pl-2 gap-0.5">
+          <p class="text-base font-semibold text-gray-heavy">
+            {{ user.username }}
+          </p>
+          <p class="text-sm text-gray-heavy">{{ user.fullname }}</p>
+        </div>
+      </button>
+    </li>
+    } }
+  </ul>
+<!-- </div> -->
+} @else if(notFound){
+<!-- <div
+  class="flex justify-center text-md absolute w-full mt-1 rounded-lg shadow-lg max-h-48 overflow-y-auto bg-white p-4"
+  [class.hidden]="closeSearchList"
+  #ResultList
+> -->
+  <small class="flex w-full justify-center items-center text-gray-heavy h-14">Not found</small>
+<!-- </div> -->
+}
