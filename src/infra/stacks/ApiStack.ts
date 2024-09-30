@@ -111,17 +111,21 @@ export class ApiStack extends Stack {
         const postCommentResource = postResource.addResource('comment', optionsWithCors)
         postCommentResource.addMethod('POST', props.usersLambdaIntegration)
 
-          //Obtener los comentarios paginados de un post
-          const commentsByPostResource = postResource.addResource('comments-list', optionsWithCors)
-          const commentPostIdParamResource = commentsByPostResource.addResource('{pkParam}', optionsWithCors)
-          const lastCommentIdParamResource = commentPostIdParamResource.addResource('{skParam}', optionsWithCors)
-          lastCommentIdParamResource.addMethod('GET', props.usersLambdaIntegration)
+        //Eliminar un comentario
+        const deleteCommentResource = postResource.addResource('delete-comment', optionsWithCors)
+        deleteCommentResource.addMethod('POST', props.usersLambdaIntegration)
 
-          //Obtener todos los post para la vista home
-          const allPostsResource = postResource.addResource('all', optionsWithCors)
-          const pkParamResource = allPostsResource.addResource('{lastUsername}', optionsWithCors)// ->usado para paginado
-          const skParamResource = pkParamResource.addResource('{lastPostId}', optionsWithCors)// ->usado para paginado
-          skParamResource.addMethod('GET', props.usersLambdaIntegration)
+        //Obtener los comentarios paginados de un post
+        const commentsByPostResource = postResource.addResource('comments-list', optionsWithCors)
+        const commentPostIdParamResource = commentsByPostResource.addResource('{pkParam}', optionsWithCors)
+        const lastCommentIdParamResource = commentPostIdParamResource.addResource('{skParam}', optionsWithCors)
+        lastCommentIdParamResource.addMethod('GET', props.usersLambdaIntegration)
+
+        //Obtener todos los post para la vista home
+        const allPostsResource = postResource.addResource('all', optionsWithCors)
+        const pkParamResource = allPostsResource.addResource('{lastUsername}', optionsWithCors)// ->usado para paginado
+        const skParamResource = pkParamResource.addResource('{lastPostId}', optionsWithCors)// ->usado para paginado
+        skParamResource.addMethod('GET', props.usersLambdaIntegration)
 
     }
 
