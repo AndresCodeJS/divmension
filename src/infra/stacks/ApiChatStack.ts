@@ -8,14 +8,14 @@ import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { join } from "node:path";
 
     interface ApiStackProps extends StackProps {
-        lambdaChatIntegration:  WebSocketLambdaIntegration,
+        /* lambdaChatIntegration:  WebSocketLambdaIntegration, */
       /*   usersLambdaIntegration: LambdaIntegration, */
         /* userPool: IUserPool */
     }
     
-    export class ApiStack extends Stack {
+    export class ApiChatStack extends Stack {
     
-        constructor(scope: Construct, id: string, props: ApiStackProps) {
+        constructor(scope: Construct, id: string, props?: ApiStackProps) {
             super(scope, id, props)
 
             //FUNCION LAMBDA A SER EJECUTADA POR EL WEBSOCKET
