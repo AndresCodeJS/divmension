@@ -13,56 +13,51 @@ import { Construct } from "constructs";
 import { join } from "node:path";
 
 interface LambdaStackProps extends StackProps {
-  devmensionTable: ITable;
+/*   devmensionTable: ITable;
   gsi1Name: string;
   s3AccessRole: Role;
-  photosBucket: IBucket;
+  photosBucket: IBucket; */
 }
 
-export class LambdaStack extends Stack {
-  public readonly usersLambdaIntegration: LambdaIntegration;
+export class LambdaChatStack extends Stack {
+  public readonly lambdaChatIntegration: LambdaIntegration;
 
   constructor(scope: Construct, id: string, props: LambdaStackProps) {
     super(scope, id, props);
 
-    const usersLambda = new NodejsFunction(this, "usersLambda", {
+    const lambdaChat = new NodejsFunction(this, "lambdaChat", {
       runtime: Runtime.NODEJS_18_X,
       handler: "handler",
-      entry: join(__dirname, "..", "..", "services", "users", "handler.ts"),
+      entry: join(__dirname, "..", "..", "services", "chat", "handler.ts"), 
       environment: {
-        TABLE_NAME: props.devmensionTable.tableName,
+  /*       TABLE_NAME: props.devmensionTable.tableName,
         TABLE_GSI1_NAME: props.gsi1Name,
         SECRET_KEY: "DIVMENSION_SECRET_PW_KEY",
         JWT_SECRET: "JWT_SECRET_CODE",
-        S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName,
-        ACCOUNT_ID: "339712893600", //ACCOUNT
-        REGION: "us-east-1", //REGION
+        S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName, */
+        ACCOUNT_ID: "339712893600",
+        REGION: "us-east-1",
       },
-      bundling: {
+ /*      bundling: {
         nodeModules: ["bcryptjs", "jsonwebtoken", "ulid"],
-      },
+      }, */
       timeout: Duration.seconds(6),
     });
 
-    usersLambda.addToRolePolicy(
+  /*   lambdaChat.addToRolePolicy( 
       new PolicyStatement({
         effect: Effect.ALLOW,
         actions: [
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem",
-          "dynamodb:GetItem",
-          "dynamodb:UpdateItem",
-          "dynamodb:Scan",
-          "dynamodb:Query",
+          "execute-api:ManageConnections"
         ],
         resources: [
           props.devmensionTable.tableArn,
           `${props.devmensionTable.tableArn}/index/${props.gsi1Name}`,
         ],
       })
-    );
+    ); */
 
-    usersLambda.addToRolePolicy(
+   /*  usersLambda.addToRolePolicy(
       new PolicyStatement({
         effect: Effect.ALLOW,
         actions: ["sts:AssumeRole"],
@@ -70,7 +65,7 @@ export class LambdaStack extends Stack {
           `arn:aws:iam::339712893600:role/${props.s3AccessRole.roleName}`,
         ],
       })
-    );
+    ); */
 
     /*   placesLambda.addToRolePolicy(new PolicyStatement({
               effect: Effect.ALLOW,
@@ -81,6 +76,6 @@ export class LambdaStack extends Stack {
               resources: ['*'] //bad practice
           })) */
 
-    this.usersLambdaIntegration = new LambdaIntegration(usersLambda);
+    this.lambdaChatIntegration = new LambdaIntegration(lambdaChat);
   }
 }
