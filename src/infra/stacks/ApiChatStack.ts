@@ -64,6 +64,7 @@ export class ApiChatStack extends Stack {
             lambdaChat
           ),
         },
+         routeSelectionExpression: '$request.body.action',
       }
     );
 
@@ -109,22 +110,15 @@ export class ApiChatStack extends Stack {
     // Otorgar permisos adicionales a la función Lambda para manejar conexiones
     webSocketApi.grantManageConnections(lambdaChat);
 
-    // Agregar política de recursos para permitir conexiones desde cualquier origen
-    const resourcePolicy = new iam.PolicyDocument({
-      statements: [
-        new iam.PolicyStatement({
-          effect: iam.Effect.ALLOW,
-          principals: [new iam.AnyPrincipal()],
-          actions: ['execute-api:Invoke'],
-          resources: ['execute-api:/*/*/*'],
-        }),
-      ],
-    });
+     // Crear y aplicar la política de recursos para permitir conexiones desde cualquier origen
+    /*  const resourcePolicy = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      principals: [new iam.AnyPrincipal()],
+      actions: ['execute-api:Invoke'],
+      resources: ['*'],
+    }); */
 
-    // Aplicar la política de recursos al API
-    const cfnWebSocketApi = webSocketApi.node
-      .defaultChild as apigatewayv2.CfnApi;
-    cfnWebSocketApi.addPropertyOverride('PolicyDocument', resourcePolicy);
+  
 
     // Mostrar la URL del WebSocket en la salida
     new CfnOutput(this, 'WebSocketURL', {
