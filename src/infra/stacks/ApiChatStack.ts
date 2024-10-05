@@ -10,15 +10,19 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { join } from 'node:path';
+import { ITable } from 'aws-cdk-lib/aws-dynamodb';
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 interface ApiStackProps extends StackProps {
   /* lambdaChatIntegration:  WebSocketLambdaIntegration, */
   /*   usersLambdaIntegration: LambdaIntegration, */
   /* userPool: IUserPool */
+  gsi1Name: string;
+  divmensionChatTable: ITable;
 }
 
 export class ApiChatStack extends Stack {
-  constructor(scope: Construct, id: string, props?: ApiStackProps) {
+  constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
     //FUNCION LAMBDA A SER EJECUTADA POR EL WEBSOCKET
@@ -27,6 +31,7 @@ export class ApiChatStack extends Stack {
       handler: 'handler',
       entry: join(__dirname, '..', '..', 'services', 'chat', 'handler.ts'),
       environment: {
+        CHAT_TABLE_NAME: props.divmensionChatTable.tableName,
         /*       TABLE_NAME: props.devmensionTable.tableName,
                   TABLE_GSI1_NAME: props.gsi1Name,
                   SECRET_KEY: "DIVMENSION_SECRET_PW_KEY",
@@ -40,6 +45,25 @@ export class ApiChatStack extends Stack {
                 }, */
       timeout: Duration.seconds(6),
     });
+
+    //OTORGAR PERMISOS A LA FUNCION LAMBDA PARA ACCEDER A LA TABLA DE MANEJO DE CHAT
+    lambdaChat.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: [
+          'dynamodb:PutItem',
+          'dynamodb:DeleteItem',
+          'dynamodb:GetItem',
+          'dynamodb:UpdateItem',
+          'dynamodb:Scan',
+          'dynamodb:Query',
+        ],
+        resources: [
+          props.divmensionChatTable.tableArn,
+          `${props.divmensionChatTable.tableArn}/index/${props.gsi1Name}`,
+        ],
+      })
+    );
 
     //EJECUCIONES DE LAMBDA CUANDO OCURRE UNA CONEXION O DESCONEXION
     const webSocketApi = new apigatewayv2.WebSocketApi(
@@ -64,7 +88,7 @@ export class ApiChatStack extends Stack {
             lambdaChat
           ),
         },
-         routeSelectionExpression: '$request.body.action',
+        routeSelectionExpression: '$request.body.action',
       }
     );
 
@@ -110,15 +134,13 @@ export class ApiChatStack extends Stack {
     // Otorgar permisos adicionales a la función Lambda para manejar conexiones
     webSocketApi.grantManageConnections(lambdaChat);
 
-     // Crear y aplicar la política de recursos para permitir conexiones desde cualquier origen
+    // Crear y aplicar la política de recursos para permitir conexiones desde cualquier origen
     /*  const resourcePolicy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       principals: [new iam.AnyPrincipal()],
       actions: ['execute-api:Invoke'],
       resources: ['*'],
     }); */
-
-  
 
     // Mostrar la URL del WebSocket en la salida
     new CfnOutput(this, 'WebSocketURL', {

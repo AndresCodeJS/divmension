@@ -6,6 +6,7 @@ import { AuthStack } from "./stacks/AuthStack";
 import { UserLambdaStack } from "./stacks/UserLambdaStack";
 import { UiDeploymentStack } from "./stacks/UiDeploymentStack";
 import { ApiChatStack } from "./stacks/ApiChatStack";
+import { DataChatStack } from "./stacks/DataChatStack";
 
 const app = new App();
 const dataStack = new DataStack(app, "DataStack");
@@ -25,8 +26,11 @@ new ApiStack(app, "ApiStack", {
   /* userPool: authStack.userPool */
 });
 
+//STACK PARA CREACION DE TABLA DE REGISTRO DE CHAT
+const dataChatStack = new DataChatStack(app,"DataChatStack")
+
 //STACK USADO PARA LA CREACION DEL CHAT
-new ApiChatStack(app, "ApiChatStack")
+new ApiChatStack(app, "ApiChatStack", {divmensionChatTable: dataChatStack.divmensionChatTable, gsi1Name:dataChatStack.gsi1Name})
 
 //DEPLOY DEL FRONT
 new UiDeploymentStack(app,"UiDeploymentStack")

@@ -93,6 +93,7 @@ export class DataStack extends Stack {
 
     this.gsi1Name = "gsi1";
 
+    //CREACION DE TABLA PARA MANEJO DE USUARIOS Y POSTS
     this.devmensionTable = new DynamoTable(this, "DevmensionTable", {
       partitionKey: {
         name: "pk",
@@ -116,25 +117,26 @@ export class DataStack extends Stack {
       billingMode: BillingMode.PROVISIONED,
     });
 
-    // Enable auto-scaling for write capacity
+    // ESCALADO DE UNIDAD DE CAPACIDAD DE ESCRITURA
     const writeScaling = this.devmensionTable.autoScaleWriteCapacity({
       minCapacity: 4, // Minimum write capacity units
       maxCapacity: 8, // Maximum write capacity units
     });
 
-    // Define how the write capacity should scale
+    // PROPIEDADES DE ESCALADO DE ESCRITURA
     writeScaling.scaleOnUtilization({
       targetUtilizationPercent: 70, // Target utilization percentage
       scaleInCooldown: Duration.minutes(2), // Cooldown period after scaling in
       scaleOutCooldown: Duration.minutes(2), // Cooldown period after scaling out
     });
 
-    // Optionally, you can also enable auto-scaling for read capacity similarly
+    // ESCALADO DE UNIDAD DE CAPACIDAD DE LECTURA
     const readScaling = this.devmensionTable.autoScaleReadCapacity({
       minCapacity: 4,
       maxCapacity: 8,
     });
 
+    // PROPIEDADES DE ESCALADO DE LECTURA
     readScaling.scaleOnUtilization({
       targetUtilizationPercent: 70,
       scaleInCooldown: Duration.minutes(2),
