@@ -1,41 +1,64 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-/* import { ApiGatewayManagementApi } from 'aws-sdk'; */
-
+import {
+  APIGatewayProxyHandler,
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+} from 'aws-lambda';
+import {
+  ApiGatewayManagementApiClient,
+  DeleteConnectionCommand,
+} from '@aws-sdk/client-apigatewaymanagementapi';
 
 interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'requestContext'> {
-    requestContext: {
-      connectionId: string;
-      domainName: string;
-      stage: string;
-      routeKey: string;
-    };
-  }
+  requestContext: {
+    connectionId: string;
+    domainName: string;
+    stage: string;
+    routeKey: string;
+  };
+}
 
-  interface WebSocketMessage {
-    action: string;
-    data: any;
-  }
+interface WebSocketMessage {
+  action: string;
+  data: any;
+}
 
+async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
+  console.log('Evento recibido:', JSON.stringify(event, null, 2));
 
-  async function handler(
-    event: WebSocketEvent
-  ): Promise<APIGatewayProxyResult> {
+  const { routeKey, connectionId, domainName, stage } = event.requestContext;
 
-    console.log('Evento recibido:', JSON.stringify(event, null, 2));
+  /*   console.log('domainName', domainName);
 
-    const { routeKey, connectionId, domainName, stage } = event.requestContext;
+    console.log('stage', stage); */
 
-    console.log('domainName', domainName);
+  const callbackUrl = `https://${domainName}/${stage}`;
 
-    console.log('stage', stage);
-
-    const callbackUrl = `https://${domainName}/${stage}`;
-
-    
   // Manejar eventos de conexión y desconexión
   if (routeKey === '$connect') {
     console.log('Nueva conexión establecida');
-    return { statusCode: 200, body: 'Conectado' };
+
+  if(event.queryStringParameters){
+    const username = event.queryStringParameters["username"]
+    console.log('el username es: ', username)
+  }
+
+    //TODO
+
+    //Verificar el token y extraer el username
+
+    //Si el token es valido se guarda en la base de datos la conexion del usuario con un PutCommand
+
+    //Si el token no es valido se cierra la conexion con el
+    const client = new ApiGatewayManagementApiClient();
+    const input = {
+      ConnectionId: connectionId,
+    };
+    const command = new DeleteConnectionCommand(input);
+    const response = await client.send(command);
+
+    console.log('Respuesta', JSON.stringify(response, null, 2));
+
+    return { statusCode: 200, body: 'Conectado y Desconectado' };
   } else if (routeKey === '$disconnect') {
     console.log('Conexión cerrada');
     return { statusCode: 200, body: 'Desconectado' };
@@ -55,26 +78,24 @@ interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'requestContext'> {
     switch (action) {
       case 'SEND_MESSAGE':
         /* await handleSendMessage(apigwManagementApi, connectionId, data); */
-        console.log('mensaje', data.message)
+        console.log('mensaje', data.message);
         break;
       case 'JOIN_ROOM':
         /* await handleJoinRoom(apigwManagementApi, connectionId, data); */
         break;
       case 'LEAVE_ROOM':
-       /*  await handleLeaveRoom(apigwManagementApi, connectionId, data); */
+        /*  await handleLeaveRoom(apigwManagementApi, connectionId, data); */
         break;
       default:
         console.log(`Acción no reconocida: ${action}`);
-       /*  await sendMessageToClient(apigwManagementApi, connectionId, { error: 'Acción no reconocida' }); */
+      /*  await sendMessageToClient(apigwManagementApi, connectionId, { error: 'Acción no reconocida' }); */
     }
   } catch (error) {
     console.error('Error handling action:', error);
     return { statusCode: 500, body: 'Internal server error' };
   }
 
-
   return { statusCode: 200, body: 'Mensaje procesado' };
+}
 
-  }
-
-  export { handler };
+export { handler };
