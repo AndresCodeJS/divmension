@@ -25,6 +25,9 @@ export class ApiChatStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
+    const account = '339712893600'
+    const region = 'us-east-1'
+
     //FUNCION LAMBDA A SER EJECUTADA POR EL WEBSOCKET
     const lambdaChat = new NodejsFunction(this, 'lambdaChat', {
       runtime: Runtime.NODEJS_18_X,
@@ -37,8 +40,8 @@ export class ApiChatStack extends Stack {
                   SECRET_KEY: "DIVMENSION_SECRET_PW_KEY",
                   JWT_SECRET: "JWT_SECRET_CODE",
                   S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName, */
-        ACCOUNT_ID: '339712893600',
-        REGION: 'us-east-1',
+        ACCOUNT_ID: account,
+        REGION: region,
       },
       /*      bundling: {
                   nodeModules: ["bcryptjs", "jsonwebtoken", "ulid"],
@@ -119,15 +122,16 @@ export class ApiChatStack extends Stack {
 
     const policy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
-      actions: ['execute-api:ManageConnections'],
+      actions: [
+        'execute-api:ManageConnections',
+      ],
       resources: [
-        this.formatArn({
-          service: 'execute-api',
-          resourceName: `${stage.stageName}/POST/@connections/*`,
-          resource: webSocketApi.apiId,
-        }),
+        `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/POST/@connections/*`,
+        `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/GET/@connections/*`,
+        `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/DELETE/@connections/*`
       ],
     });
+
 
     lambdaChat.addToRolePolicy(policy);
 
