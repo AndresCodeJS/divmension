@@ -8,6 +8,7 @@ import {
   DeleteConnectionCommand,
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
+import { AuthChatService } from './auth';
 
 interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'requestContext'> {
   requestContext: {
@@ -23,69 +24,73 @@ interface WebSocketMessage {
   data: any;
 }
 
-const callbackUrl = `https://narritfovc.execute-api.us-east-1.amazonaws.com/prod/`
+const callbackUrl = `https://narritfovc.execute-api.us-east-1.amazonaws.com/prod/`;
 
 const client = new ApiGatewayManagementApiClient({
-   endpoint: callbackUrl
-  });
+  endpoint: callbackUrl,
+});
+
+const auth = new AuthChatService()
 
 async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
   console.log('Evento recibido:', JSON.stringify(event, null, 2));
 
   const { routeKey, connectionId, domainName, stage } = event.requestContext;
 
-  /*   console.log('domainName', domainName);
-
-    console.log('stage', stage); */
-
   /* const callbackUrl = `https://${domainName}/${stage}`; */
 
-  // Manejar eventos de conexión y desconexión
+  // MANEJO DE EVENTO DE CONEXION
   if (routeKey === '$connect') {
     console.log('Nueva conexión establecida');
 
-    let connId: any = 'fO5-yezYIAMCFLw='
+    let token;
 
-  if(event.queryStringParameters){
-    connId = event.queryStringParameters["connId"]
-    console.log('Id de  conexion: ', connId )
-  }
+    if (event.queryStringParameters) {
+      token = event.queryStringParameters['token'];
+      console.log('Token: ', token);
+    }
 
     //TODO
 
-    //Verificar el token y extraer el username
+    //VERIFICA EL TOKEN Y EXTRAE EL USERNAME
+    let username = auth.verifyToken(token)
 
+    //SI EL TOKEN NO ES VALIDO SE CIERRA LA CONEXION
+    if(!username){
+      return { statusCode: 400, body: JSON.stringify({message:'invalid token'}) };
+    }
+
+    //TODO --------------------------------------
     //Si el token es valido se guarda en la base de datos la conexion del usuario con un PutCommand
 
-    //Si el token no es valido se cierra la conexion con el
+    
     try {
+      console.log('el endpoint es : ', callbackUrl);
+      console.log('conexion a cerrar es: ', connectionId);
 
-      console.log('el endpoint es : ', callbackUrl)
-      console.log('conexion a cerrar es: ', connectionId)
-      
       /* const client = new ApiGatewayManagementApiClient({
         endpoint: callbackUrl
        }); */
-    /*   const input = {
+      /*   const input = {
         ConnectionId: connectionId,
       }; */
 
       const postDataTemplate = {
         Data: JSON.stringify({
-          content: "HOLA",
+          content: 'HOLA',
         }),
       };
 
       const postData = {
         ...postDataTemplate,
-        ConnectionId: connectionId,// ppaste desired connectionId
+        ConnectionId: connectionId, // ppaste desired connectionId
       };
       await client.send(new PostToConnectionCommand(postData));
 
-     /*  const command = new DeleteConnectionCommand(input);
+      /*  const command = new DeleteConnectionCommand(input);
       const response = await client.send(command); */
     } catch (error) {
-      console.log('No se pudo cerrar la conexion')
+      console.log('No se pudo cerrar la conexion');
       console.log('El error es', JSON.stringify(error, null, 2));
       console.log('El error es', JSON.stringify(error.message));
       return { statusCode: 200, body: 'No se pudo cerrar la conexion' };

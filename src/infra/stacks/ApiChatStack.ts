@@ -25,8 +25,8 @@ export class ApiChatStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const account = '339712893600'
-    const region = 'us-east-1'
+    const account = '339712893600';
+    const region = 'us-east-1';
 
     //FUNCION LAMBDA A SER EJECUTADA POR EL WEBSOCKET
     const lambdaChat = new NodejsFunction(this, 'lambdaChat', {
@@ -35,17 +35,17 @@ export class ApiChatStack extends Stack {
       entry: join(__dirname, '..', '..', 'services', 'chat', 'handler.ts'),
       environment: {
         CHAT_TABLE_NAME: props.divmensionChatTable.tableName,
-        /*       TABLE_NAME: props.devmensionTable.tableName,
-                  TABLE_GSI1_NAME: props.gsi1Name,
-                  SECRET_KEY: "DIVMENSION_SECRET_PW_KEY",
-                  JWT_SECRET: "JWT_SECRET_CODE",
-                  S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName, */
+        /* TABLE_NAME: props.devmensionTable.tableName, */
+        TABLE_GSI1_NAME: props.gsi1Name,
+        /* SECRET_KEY: "DIVMENSION_SECRET_PW_KEY", */
+        JWT_SECRET: 'JWT_SECRET_CODE', //EL MISMO QUE USA USER_LAMBDA
+        /* S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName, */
         ACCOUNT_ID: account,
         REGION: region,
       },
-      /*      bundling: {
-                  nodeModules: ["bcryptjs", "jsonwebtoken", "ulid"],
-                }, */
+           bundling: {
+                  nodeModules: ["jsonwebtoken"],
+                },
       timeout: Duration.seconds(6),
     });
 
@@ -122,16 +122,13 @@ export class ApiChatStack extends Stack {
 
     const policy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
-      actions: [
-        'execute-api:ManageConnections',
-      ],
+      actions: ['execute-api:ManageConnections'],
       resources: [
         `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/POST/@connections/*`,
         `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/GET/@connections/*`,
-        `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/DELETE/@connections/*`
+        `arn:aws:execute-api:${region}:${account}:${webSocketApi.apiId}/${stage.stageName}/DELETE/@connections/*`,
       ],
     });
-
 
     lambdaChat.addToRolePolicy(policy);
 
