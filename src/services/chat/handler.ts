@@ -9,6 +9,10 @@ import {
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
 import { AuthChatService } from './auth';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { saveStatus } from './saveStatus';
+import { searchUser } from './searchUser';
 
 interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'requestContext'> {
   requestContext: {
@@ -24,20 +28,22 @@ interface WebSocketMessage {
   data: any;
 }
 
-const callbackUrl = `https://narritfovc.execute-api.us-east-1.amazonaws.com/prod/`;
+const dbClient = new DynamoDBClient({});
 
+const docClient = DynamoDBDocumentClient.from(dbClient);
+
+const callbackUrl = `https://narritfovc.execute-api.us-east-1.amazonaws.com/prod/`;
+//MANEJO DE CONEXIONES DE LA API DESDE LAMBDA
 const client = new ApiGatewayManagementApiClient({
   endpoint: callbackUrl,
 });
 
-const auth = new AuthChatService()
+const auth = new AuthChatService();
 
 async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
   console.log('Evento recibido:', JSON.stringify(event, null, 2));
 
   const { routeKey, connectionId, domainName, stage } = event.requestContext;
-
-  /* const callbackUrl = `https://${domainName}/${stage}`; */
 
   // MANEJO DE EVENTO DE CONEXION
   if (routeKey === '$connect') {
@@ -50,23 +56,21 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
       console.log('Token: ', token);
     }
 
-    //TODO
-
     //VERIFICA EL TOKEN Y EXTRAE EL USERNAME
-    let username = auth.verifyToken(token)
+    let username = await auth.verifyToken(token);
+
+    console.log('usernam es: ', username);
 
     //SI EL TOKEN NO ES VALIDO SE CIERRA LA CONEXION
-    if(!username){
-      return { statusCode: 400, body: JSON.stringify({message:'invalid token'}) };
+    if (!username) {
+      return { statusCode: 400, body: 'Invalid token' };
     }
 
     //TODO --------------------------------------
     //Si el token es valido se guarda en la base de datos la conexion del usuario con un PutCommand
 
-    
     try {
-      console.log('el endpoint es : ', callbackUrl);
-      console.log('conexion a cerrar es: ', connectionId);
+      await saveStatus(docClient, username, 'online', connectionId);
 
       /* const client = new ApiGatewayManagementApiClient({
         endpoint: callbackUrl
@@ -75,7 +79,7 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
         ConnectionId: connectionId,
       }; */
 
-      const postDataTemplate = {
+      /*   const postDataTemplate = {
         Data: JSON.stringify({
           content: 'HOLA',
         }),
@@ -83,23 +87,42 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
 
       const postData = {
         ...postDataTemplate,
-        ConnectionId: connectionId, // ppaste desired connectionId
+        ConnectionId: connectionId, 
       };
-      await client.send(new PostToConnectionCommand(postData));
+      await client.send(new PostToConnectionCommand(postData)); */
 
       /*  const command = new DeleteConnectionCommand(input);
       const response = await client.send(command); */
     } catch (error) {
-      console.log('No se pudo cerrar la conexion');
-      console.log('El error es', JSON.stringify(error, null, 2));
-      console.log('El error es', JSON.stringify(error.message));
-      return { statusCode: 200, body: 'No se pudo cerrar la conexion' };
+      console.log('Error: ', JSON.stringify(error, null, 2));
+      return { statusCode: 400, body: "Can't save user status" };
     }
 
     return { statusCode: 200, body: 'Conectado y Desconectado' };
+
+    //CUANDO UN USUARIO ES DESCONECTADO
   } else if (routeKey === '$disconnect') {
     console.log('Conexión cerrada');
+
+    try {
+
+          //SE BUSCA A QUIEN PERTENECE EL ID DE CONEXION
+    let username = await searchUser(docClient, connectionId);
+
+    console.log('el id de conexion es del usuario', username)
+
+    //SE CAMBIA EL ESTADO DEL USUARIO A OFFLINE Y SE BORRA EL ID DE CONEXION
+    if(username){
+      await saveStatus(docClient, username, 'offline', 'none');
+    }
+
     return { statusCode: 200, body: 'Desconectado' };
+
+    } catch (error) {
+      console.log('Error: ', JSON.stringify(error, null, 2));
+      return { statusCode: 400, body: "Can't save user status" };
+    }
+
   }
 
   // Para mensajes normales, extraer la acción y los datos
