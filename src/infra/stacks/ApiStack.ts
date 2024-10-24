@@ -127,6 +127,14 @@ export class ApiStack extends Stack {
         const skParamResource = pkParamResource.addResource('{lastPostId}', optionsWithCors)// ->usado para paginado
         skParamResource.addMethod('GET', props.usersLambdaIntegration)
 
+        //RUTA DE CHAT
+        const chatResource = api.root.addResource('chat', optionsWithCors)
+
+
+        const detailsResource = chatResource.addResource('details', optionsWithCors)
+        const addresseeResource = detailsResource.addResource('{addressee}', optionsWithCors)
+        addresseeResource.addMethod('GET', props.usersLambdaIntegration)
+
     }
 
 }

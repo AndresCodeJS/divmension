@@ -14,7 +14,9 @@ import { join } from "node:path";
 
 interface LambdaStackProps extends StackProps {
   devmensionTable: ITable;
+  divmensionChatTable: ITable;
   gsi1Name: string;
+  gsi2Name: string;
   s3AccessRole: Role;
   photosBucket: IBucket;
 }
@@ -32,6 +34,8 @@ export class LambdaStack extends Stack {
       environment: {
         TABLE_NAME: props.devmensionTable.tableName,
         TABLE_GSI1_NAME: props.gsi1Name,
+        CHAT_TABLE_NAME: props.divmensionChatTable.tableName,
+        CHAT_TABLE_GSI2_NAME: props.gsi2Name,
         SECRET_KEY: "DIVMENSION_SECRET_PW_KEY",
         JWT_SECRET: "JWT_SECRET_CODE",
         S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName,

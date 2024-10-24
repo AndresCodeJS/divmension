@@ -25,6 +25,7 @@ import { unlikePost } from "../posts/UnlikePost";
 import { postComment } from "../posts/PostComment";
 import { getCommentsByPost } from "../posts/GetCommentsByPost";
 import { getAllPosts } from "../posts/GetAllPosts";
+import { getChatDetails } from "../chat/GetChatDetails";
 
 const client = new DynamoDBClient({});
 
@@ -77,6 +78,12 @@ async function handler(
         if (event.path.startsWith("/posts/all")) {
           //Obtiene todos los post para la vista home
           response = await getAllPosts(event, docClient);
+        }
+
+        //CHAT ----------------------------------------------------------------
+        if (event.path.startsWith("/chat/details")) {
+          //OBTIENE TODA LA INFORMACION DE UN CHAT
+          response = await getChatDetails(event, docClient);
         }
 
         break;

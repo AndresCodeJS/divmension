@@ -165,14 +165,14 @@ import { unfollowUser } from "../src/services/users/UnfollowUser";
 }) */
 
     //OBTENER COMENTARIOS POR POST
-    userHandler({
+ /*    userHandler({
     httpMethod: 'GET',
     path:'/posts/comments-list/',
     headers: {Authorization:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbmtvIiwiZnVsbG5hbWUiOiJkYW5rbyBzdWFyZXoiLCJlbWFpbCI6ImRhbmtvQGdtYWlsLmNvbSIsImlhdCI6MTcyNzEyMDg3OSwiZXhwIjoxNzI3MTY0MDc5fQ.8iQfDLiMYgVCHpGxB-JXKSRlcN0k8ymLoUF2ujJoKoo'},
     pathParameters:{pkParam: '01J8F7KD6NV5ZCTXRPWDC7KJ0N', skParam: 'none'}
 } as any,{} as any).then(result=>{
     console.log(result)
-})
+}) */
 
 //Seguir a un usuario
 /* userHandler({
@@ -297,3 +297,15 @@ console.log(result)
     console.log(result)
 })
  */
+
+
+//CHAT ------------------------------------------------------------
+
+/* OBTENER DETALLES DE UN CHAT */
+userHandler({
+    httpMethod: 'GET',
+    path:'/chat/details/',
+    pathParameters:{addressee:'andres'}
+} as any,{} as any).then(result=>{
+    console.log(result)
+})

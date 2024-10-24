@@ -10,9 +10,15 @@ import { DataChatStack } from './stacks/DataChatStack';
 
 const app = new App();
 const dataStack = new DataStack(app, 'DataStack');
+
+//STACK PARA CREACION DE TABLA DE REGISTRO DE CHAT
+const dataChatStack = new DataChatStack(app, 'DataChatStack');
+
 const lambdaStack = new LambdaStack(app, 'LambdaStack', {
   devmensionTable: dataStack.devmensionTable,
+  divmensionChatTable: dataChatStack.divmensionChatTable,
   gsi1Name: dataStack.gsi1Name,
+  gsi2Name:dataChatStack.gsi2Name,
   s3AccessRole: dataStack.s3AccessRole,
   photosBucket: dataStack.photosBucket,
 });
@@ -25,9 +31,6 @@ new ApiStack(app, 'ApiStack', {
   /*     usersLambdaIntegration: userLambdaStack.usersLambdaIntegration, */
   /* userPool: authStack.userPool */
 });
-
-//STACK PARA CREACION DE TABLA DE REGISTRO DE CHAT
-const dataChatStack = new DataChatStack(app, 'DataChatStack');
 
 //STACK USADO PARA LA CREACION DEL CHAT
 new ApiChatStack(app, 'ApiChatStack', {
