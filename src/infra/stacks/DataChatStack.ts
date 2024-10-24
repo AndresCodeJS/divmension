@@ -31,6 +31,7 @@ import {
   export class DataChatStack extends Stack {
     public readonly divmensionChatTable: any;
     public readonly gsi1Name: string;
+    public readonly gsi2Name: string;
   
     constructor(scope: Construct, id: string, props?: StackProps) {
       super(scope, id, props);
@@ -40,6 +41,7 @@ import {
       // ---------------------------------------------------------------------------
   
       this.gsi1Name = "gsi1";
+      this.gsi2Name = "gsi2"
   
       //CREACION DE TABLA PARA MANEJO DEL CHAT
       this.divmensionChatTable = new DynamoTable(this, "DivmensionChatTable", {
@@ -90,6 +92,15 @@ import {
         targetUtilizationPercent: 70,
         scaleInCooldown: Duration.minutes(2),
         scaleOutCooldown: Duration.minutes(2),
+      });
+
+      //CREACION DE INDICE PARA BUSQUEDA POR ID DE CHAT PARA OBTENER CODIGO ULID DE CHAT EXISTENTE
+      this.divmensionChatTable.addGlobalSecondaryIndex({
+        indexName: this.gsi2Name,
+        partitionKey: { name: "idChat", type: AttributeType.STRING },
+        writeCapacity: 1,
+        readCapacity: 1,
+        billingMode: BillingMode.PROVISIONED,
       });
     }
   }

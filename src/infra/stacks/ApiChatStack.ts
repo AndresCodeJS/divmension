@@ -19,6 +19,7 @@ interface ApiStackProps extends StackProps {
   /* userPool: IUserPool */
   gsi1Name: string;
   divmensionChatTable: ITable;
+  gsi2Name: string;
 }
 
 export class ApiChatStack extends Stack {
@@ -37,6 +38,7 @@ export class ApiChatStack extends Stack {
         CHAT_TABLE_NAME: props.divmensionChatTable.tableName,
         /* TABLE_NAME: props.devmensionTable.tableName, */
         TABLE_GSI1_NAME: props.gsi1Name,
+        TABLE_GSI2_NAME: props.gsi2Name,
         /* SECRET_KEY: "DIVMENSION_SECRET_PW_KEY", */
         JWT_SECRET: 'JWT_SECRET_CODE', //EL MISMO QUE USA USER_LAMBDA
         /* S3_ACCESS_ROLE_NAME: props.s3AccessRole.roleName, */

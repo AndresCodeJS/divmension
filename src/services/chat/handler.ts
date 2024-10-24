@@ -71,28 +71,6 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
 
     try {
       await saveStatus(docClient, username, 'online', connectionId);
-
-      /* const client = new ApiGatewayManagementApiClient({
-        endpoint: callbackUrl
-       }); */
-      /*   const input = {
-        ConnectionId: connectionId,
-      }; */
-
-      /*   const postDataTemplate = {
-        Data: JSON.stringify({
-          content: 'HOLA',
-        }),
-      };
-
-      const postData = {
-        ...postDataTemplate,
-        ConnectionId: connectionId, 
-      };
-      await client.send(new PostToConnectionCommand(postData)); */
-
-      /*  const command = new DeleteConnectionCommand(input);
-      const response = await client.send(command); */
     } catch (error) {
       console.log('Error: ', JSON.stringify(error, null, 2));
       return { statusCode: 400, body: "Can't save user status" };
@@ -105,24 +83,21 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
     console.log('Conexión cerrada');
 
     try {
+      //SE BUSCA A QUIEN PERTENECE EL ID DE CONEXION
+      let username = await searchUser(docClient, connectionId);
 
-          //SE BUSCA A QUIEN PERTENECE EL ID DE CONEXION
-    let username = await searchUser(docClient, connectionId);
+      console.log('el id de conexion es del usuario', username);
 
-    console.log('el id de conexion es del usuario', username)
+      //SE CAMBIA EL ESTADO DEL USUARIO A OFFLINE Y SE BORRA EL ID DE CONEXION
+      if (username) {
+        await saveStatus(docClient, username, 'offline', 'none');
+      }
 
-    //SE CAMBIA EL ESTADO DEL USUARIO A OFFLINE Y SE BORRA EL ID DE CONEXION
-    if(username){
-      await saveStatus(docClient, username, 'offline', 'none');
-    }
-
-    return { statusCode: 200, body: 'Desconectado' };
-
+      return { statusCode: 200, body: 'Desconectado' };
     } catch (error) {
       console.log('Error: ', JSON.stringify(error, null, 2));
       return { statusCode: 400, body: "Can't save user status" };
     }
-
   }
 
   // Para mensajes normales, extraer la acción y los datos
