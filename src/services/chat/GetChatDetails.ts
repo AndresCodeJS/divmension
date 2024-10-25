@@ -28,11 +28,11 @@ export async function getChatDetails(
     try {
       let loggedUser = JSON.parse(response.body).username;
 
-      let result: IChat = {
+      let chat: IChat = {
         newSortKey: '',
         oldSortKey: '',
         chatId: '',
-        messages: []
+        messages: [],
       };
 
       //SE OBTIENE EL ID DEL CHAT EN CASO DE QUE EL CHAT EXISTA
@@ -63,24 +63,46 @@ export async function getChatDetails(
           new QueryCommand(getChatDetailsParams)
         );
 
-        if(getDetails.Items.length){
-            result.oldSortKey = getDetails.Items[0].sk
+        if (getDetails.Items.length) {
+          chat.oldSortKey = getDetails.Items[0].sk;
+          chat.chatId = chatId;
+
+          //SE OBTIENEN LOS PRIMEROS 15 MENSAJES DEL CHAT
+
+          let params = {
+            TableName: process.env.CHAT_TABLE_NAME,
+            KeyConditionExpression: 'pk = :pk',
+            ExpressionAttributeValues: {
+              ':pk': `message#${chatId}`,
+            },
+            Limit: 15,
+            ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos
+          };
+
+          const getMessagesCommand = new QueryCommand(params);
+          let getMessages = await ddbDocClient.send(getMessagesCommand);
+
+          if (getMessages.Items.length) {
+            chat.messages = getMessages.Items;
+          }
         }
 
-
-      } else {
-        //TODO
-        //Generar chatId y ULID
+        /* ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos */
       }
-    } catch (error) {}
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          chat,
+        }),
+      };
+    } catch (error) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error,
+        }),
+      };
+    }
   }
-
-  console.log('Se recibio el destinatario ', addressee);
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      users: [],
-    }),
-  };
 }

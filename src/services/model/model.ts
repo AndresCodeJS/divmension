@@ -8,7 +8,7 @@ export interface IChat {
   newSortKey: string; // USADO PARA ORDENAR LA POSICION DEL CHAT EN LA BASE DE DATOS
   oldSortKey: string; // USADO PARA ENCONTRAR EL CHAT EN LA BASE DE DATOS Y ACTUALIZARLO POR NEW SORT KEY
   chatId: string; // USADO PARA IDENTIFICAR EL CHAT
-  messages: IMessage[]
+  messages: any[]
 }
 
 export interface IMessage {
