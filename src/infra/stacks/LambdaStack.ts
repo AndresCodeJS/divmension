@@ -48,6 +48,7 @@ export class LambdaStack extends Stack {
       timeout: Duration.seconds(6),
     });
 
+    //SE OTORGAN PERMISOS A LAMBDA PARA EJECUTAR LA TABLA DIVMENSION
     usersLambda.addToRolePolicy(
       new PolicyStatement({
         effect: Effect.ALLOW,
@@ -62,6 +63,25 @@ export class LambdaStack extends Stack {
         resources: [
           props.devmensionTable.tableArn,
           `${props.devmensionTable.tableArn}/index/${props.gsi1Name}`,
+        ],
+      })
+    );
+
+    //SE OTORGAN PERMISOS A LAMBDA PARA EJECUTAR LA TABLA DE CHAT
+    usersLambda.addToRolePolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        actions: [
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:Scan",
+          "dynamodb:Query",
+        ],
+        resources: [
+          props.divmensionChatTable.tableArn,
+          `${props.divmensionChatTable.tableArn}/index/${props.gsi2Name}`,
         ],
       })
     );

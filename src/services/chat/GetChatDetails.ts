@@ -39,7 +39,7 @@ export async function getChatDetails(
       const getChatCommand = new GetCommand({
         TableName: process.env.CHAT_TABLE_NAME,
         Key: {
-          pk: `${loggedUser}#addressee`,
+          pk: `${loggedUser}#${addressee}`,
           sk: 'chat',
         },
       });
@@ -47,13 +47,13 @@ export async function getChatDetails(
       const getChat = await ddbDocClient.send(getChatCommand);
 
       if (getChat.Item) {
-        let chatId = getChat.Item.chatId;
+        let chatId = getChat.Item.id;
 
         //OBTIENE EL SORT KEY DEL CHAT
         const getChatDetailsParams = {
           TableName: process.env.CHAT_TABLE_NAME,
           IndexName: process.env.CHAT_TABLE_GSI2_NAME,
-          KeyConditionExpression: 'chatId = :pk_value',
+          KeyConditionExpression: 'idChat = :pk_value',
           ExpressionAttributeValues: {
             ':pk_value': chatId,
           },

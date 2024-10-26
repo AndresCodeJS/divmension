@@ -304,8 +304,10 @@ console.log(result)
 /* OBTENER DETALLES DE UN CHAT */
 userHandler({
     httpMethod: 'GET',
+    headers: {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuZHJlcyIsImZ1bGxuYW1lIjoiYW5kcmVzIGdvbWV6IiwiZW1haWwiOiJhbmRyZXNAZ21haWwuY29tIiwicGhvdG9VcmwiOiJodHRwczovL2Rpdm1lbnNpb24tMTJlNTYxOTMwYmM3LnMzLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tL2FuZHJlcy9wcm9maWxlLzE3MjgzMjI4OTg0MTQiLCJpYXQiOjE3Mjk5NDc3NjQsImV4cCI6MTcyOTk5MDk2NH0.JVvPcdSx5VSfBlsE-BRVxilfi8T624rzFpTh-ZbBBWo"},
     path:'/chat/details/',
-    pathParameters:{addressee:'andres'}
+    pathParameters:{addressee:'adrian'}
 } as any,{} as any).then(result=>{
     console.log(result)
 })
+
