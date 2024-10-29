@@ -13,6 +13,8 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { saveStatus } from './saveStatus';
 import { searchUser } from './searchUser';
+import { handleSendMessage } from './handleSendMessage';
+import { storeMessage } from './storeMessage';
 
 interface WebSocketEvent extends Omit<APIGatewayProxyEvent, 'requestContext'> {
   requestContext: {
@@ -110,14 +112,23 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
 
   const { action, data } = body;
 
+  //VERIFICA EL TOKEN Y EXTRAE EL USERNAME
+  let username = await auth.verifyToken(data.token);
+
+  //SI EL TOKEN NO ES VALIDO SE CIERRA LA CONEXION
+  if (!username) {
+    return { statusCode: 400, body: 'Invalid token' };
+  }
+
   try {
     switch (action) {
       case 'SEND_MESSAGE':
-        /* await handleSendMessage(apigwManagementApi, connectionId, data); */
+        await storeMessage(username,data, docClient)
+        await handleSendMessage(client, data, docClient);
         console.log('mensaje', data.message);
         break;
-      case 'JOIN_ROOM':
-        /* await handleJoinRoom(apigwManagementApi, connectionId, data); */
+      case 'PING':
+        console.log('Actualizando conexion');
         break;
       case 'LEAVE_ROOM':
         /*  await handleLeaveRoom(apigwManagementApi, connectionId, data); */
