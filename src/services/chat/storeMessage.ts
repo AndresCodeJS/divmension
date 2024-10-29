@@ -4,7 +4,7 @@ import {
   DeleteConnectionCommand,
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
-import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 
 export async function storeMessage(
   username: string,
@@ -13,65 +13,90 @@ export async function storeMessage(
 ) {
   try {
     //SI EN DATA NO VIENE UN VALOR DE OLD SORT KEY SIGNIFICA QUE EL CHAT ES NUEVO
-    if(!data.oldSortKey){
+    if (!data.oldSortKey) {
+      //CREACION DE CHAT PARA REMITENTE
+      const createSenderCommand = new PutCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Item: {
+          pk: `${username}#chat`,
+          sk: data.newSortKey,
+          idChat: data.id,
+        },
+      });
 
-        //CREACION DE CHAT PARA REMITENTE
-        const createSenderCommand = new PutCommand({
-            TableName: process.env.CHAT_TABLE_NAME,
-            Item: {
-              pk: `${username}#chat`,
-              sk: data.newSortKey,
-              idChat: data.id
-            },
-          });
-        
-          await ddbDocClient.send(createSenderCommand);
+      await ddbDocClient.send(createSenderCommand);
 
-        //CREACION DE CHAT PARA DESTINATARIO
-        const createAddresseeCommand = new PutCommand({
-            TableName: process.env.CHAT_TABLE_NAME,
-            Item: {
-              pk: `${data.to}#chat`,
-              sk: data.newSortKey,
-              idChat: data.id
-            },
-          });
-        
-          await ddbDocClient.send(createAddresseeCommand);
+      //CREACION DE CHAT PARA DESTINATARIO
+      const createAddresseeCommand = new PutCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Item: {
+          pk: `${data.to}#chat`,
+          sk: data.newSortKey,
+          idChat: data.id,
+        },
+      });
 
+      await ddbDocClient.send(createAddresseeCommand);
 
-        //REGISTRO DE CHAT PARA EL PAR REMITENTE-DESTINATARIO
-        const senderAddresseeCommand = new PutCommand({
-            TableName: process.env.CHAT_TABLE_NAME,
-            Item: {
-              pk: `${username}#${data.to}`,
-              sk: 'chat',
-              id: data.id //NO SE GUARDA EN EL ATRIBUTO idChat DEBIDO A QUE ES USADO COMO INDEX PARA EXTRAER EL SORTKEY
-            },
-          });
-        
-          await ddbDocClient.send(senderAddresseeCommand);
+      //REGISTRO DE CHAT PARA EL PAR REMITENTE-DESTINATARIO
+      const senderAddresseeCommand = new PutCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Item: {
+          pk: `${username}#${data.to}`,
+          sk: 'chat',
+          id: data.id, //NO SE GUARDA EN EL ATRIBUTO idChat DEBIDO A QUE ES USADO COMO INDEX PARA EXTRAER EL SORTKEY
+        },
+      });
 
+      await ddbDocClient.send(senderAddresseeCommand);
 
+      //REGISTRO DE CHAT PARA EL PAR DESTINATARIO-REMITENTE
+      const addresseeSenderCommand = new PutCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Item: {
+          pk: `${data.to}#${username}`,
+          sk: 'chat',
+          id: data.id, //NO SE GUARDA EN EL ATRIBUTO idChat DEBIDO A QUE ES USADO COMO INDEX PARA EXTRAER EL SORTKEY
+        },
+      });
 
-        //REGISTRO DE CHAT PARA EL PAR DESTINATARIO-REMITENTE
-        const addresseeSenderCommand = new PutCommand({
-            TableName: process.env.CHAT_TABLE_NAME,
-            Item: {
-              pk: `${data.to}#${username}`,
-              sk: 'chat',
-              id: data.id //NO SE GUARDA EN EL ATRIBUTO idChat DEBIDO A QUE ES USADO COMO INDEX PARA EXTRAER EL SORTKEY
-            },
-          });
-        
-          await ddbDocClient.send(addresseeSenderCommand);
+      await ddbDocClient.send(addresseeSenderCommand);
+    } else {
+      //ACTUALIZACION DEL SORTKEY DE CHAT PARA REMITENTE
+      const updateSenderCommand = new UpdateCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Key: {
+          pk: `${username}#chat`,
+          sk: data.oldSortKey,
+        },
+        UpdateExpression: 'SET #attrName = :sk',
+        ExpressionAttributeNames: {
+          '#attrName': 'sk',
+        },
+        ExpressionAttributeValues: {
+          ':sk': data.newSortKey,
+        },
+      });
 
-    }else{
-        //ACTUALIZACION DEL SORTKEY DE CHAT PARA REMITENTE
+      await ddbDocClient.send(updateSenderCommand);
 
+      //ACTUALIZACION DEL SORTKEY DE CHAT PARA DESTINATARIO
+      const updateSenderAddressee = new UpdateCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Key: {
+          pk: `${data.to}#chat`,
+          sk: data.oldSortKey,
+        },
+        UpdateExpression: 'SET #attrName = :sk',
+        ExpressionAttributeNames: {
+          '#attrName': 'sk',
+        },
+        ExpressionAttributeValues: {
+          ':sk': data.newSortKey,
+        },
+      });
 
-        //ACTUALIZACION DEL SORTKEY DE CHAT PARA DESTINATARIO
-
+      await ddbDocClient.send(updateSenderAddressee);
     }
 
     //REGISTRO DEL MENSAJE
@@ -92,8 +117,6 @@ export async function storeMessage(
       });
 
       await ddbDocClient.send(createCommentCommand); */
-
-
 
     /* timeToLiveAttribute: 'expirationTime', */
 
