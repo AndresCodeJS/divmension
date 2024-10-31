@@ -130,9 +130,6 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
       case 'PING':
         console.log('Actualizando conexion');
         break;
-      case 'LEAVE_ROOM':
-        /*  await handleLeaveRoom(apigwManagementApi, connectionId, data); */
-        break;
       default:
         console.log(`Acción no reconocida: ${action}`);
       /*  await sendMessageToClient(apigwManagementApi, connectionId, { error: 'Acción no reconocida' }); */

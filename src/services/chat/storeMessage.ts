@@ -5,6 +5,7 @@ import {
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
 import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { ulid } from 'ulid';
 
 export async function storeMessage(
   username: string,
@@ -101,55 +102,22 @@ export async function storeMessage(
 
     //REGISTRO DEL MENSAJE
 
-    /* const commentId = ulid();
-      const currentTimestamp = Math.floor(Date.now() / 1000); // Obtener timestamp en segundos
+    const messageId = ulid();
+    const currentTimestamp = Math.floor(Date.now() / 1000);
 
-      //CREA EL COMENTARIO
-      const createCommentCommand = new PutCommand({
-        TableName: process.env.TABLE_NAME,
-        Item: {
-          pk: `${postId}#comment`,
-          sk: commentId,
-          user: loggedUser,
-          content,
-          timeStamp: currentTimestamp,
-        },
-      });
-
-      await ddbDocClient.send(createCommentCommand); */
-
-    /* timeToLiveAttribute: 'expirationTime', */
-
-    // VERIFICA QUE EL DESTINATARIO ESTE CONECTADO Y RECUPERA SU ID DE CONEXION
-    const getConnIdCommand = new GetCommand({
+    const createMessageCommand = new PutCommand({
       TableName: process.env.CHAT_TABLE_NAME,
-      Key: {
-        pk: data.to,
-        sk: 'info',
+      Item: {
+        pk: `message${data.id}`,
+        sk: messageId,
+        sender: username,
+        addressee: data.to,
+        content: data.message,
+        timeStamp: currentTimestamp,
       },
     });
 
-    const getConnId = await ddbDocClient.send(getConnIdCommand);
-
-    if (getConnId.Item) {
-      console.log('se obtiene status ', getConnId.Item.status);
-
-      let connId = '';
-
-      if (getConnId.Item.status == 'online') {
-        connId = getConnId.Item.connId;
-
-        //SE ENVIA EL MENSAJE
-        const params = {
-          ConnectionId: connId,
-          Data: data.message,
-        };
-
-        const command = new PostToConnectionCommand(params);
-
-        await client.send(command);
-      }
-    }
+    await ddbDocClient.send(createMessageCommand);
   } catch (error) {
     console.log('Ha ocurrido un error: ', JSON.stringify(error, null, 2));
   }
