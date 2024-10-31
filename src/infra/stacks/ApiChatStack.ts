@@ -46,7 +46,7 @@ export class ApiChatStack extends Stack {
         REGION: region,
       },
            bundling: {
-                  nodeModules: ["jsonwebtoken"],
+                  nodeModules: ["jsonwebtoken", "ulid"],
                 },
       timeout: Duration.seconds(6),
     });

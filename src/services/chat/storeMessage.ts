@@ -63,8 +63,11 @@ export async function storeMessage(
 
       await ddbDocClient.send(addresseeSenderCommand);
     } else {
+
+      //TODO BORRAR Y VOLVER A CREAR
+
       //ACTUALIZACION DEL SORTKEY DE CHAT PARA REMITENTE
-      const updateSenderCommand = new UpdateCommand({
+      /* const updateSenderCommand = new UpdateCommand({
         TableName: process.env.CHAT_TABLE_NAME,
         Key: {
           pk: `${username}#chat`,
@@ -79,10 +82,10 @@ export async function storeMessage(
         },
       });
 
-      await ddbDocClient.send(updateSenderCommand);
+      await ddbDocClient.send(updateSenderCommand); */
 
       //ACTUALIZACION DEL SORTKEY DE CHAT PARA DESTINATARIO
-      const updateSenderAddressee = new UpdateCommand({
+     /*  const updateSenderAddressee = new UpdateCommand({
         TableName: process.env.CHAT_TABLE_NAME,
         Key: {
           pk: `${data.to}#chat`,
@@ -97,7 +100,7 @@ export async function storeMessage(
         },
       });
 
-      await ddbDocClient.send(updateSenderAddressee);
+      await ddbDocClient.send(updateSenderAddressee); */
     }
 
     //REGISTRO DEL MENSAJE
