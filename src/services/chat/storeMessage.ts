@@ -4,7 +4,12 @@ import {
   DeleteConnectionCommand,
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
-import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DeleteCommand,
+  GetCommand,
+  PutCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { ulid } from 'ulid';
 
 export async function storeMessage(
@@ -63,29 +68,58 @@ export async function storeMessage(
 
       await ddbDocClient.send(addresseeSenderCommand);
     } else {
-
-      //TODO BORRAR Y VOLVER A CREAR
-
-      //ACTUALIZACION DEL SORTKEY DE CHAT PARA REMITENTE
-      /* const updateSenderCommand = new UpdateCommand({
+      //BORRA EL CHAT PARA EL REMITENTE
+      const deleteChatCommand = new DeleteCommand({
         TableName: process.env.CHAT_TABLE_NAME,
         Key: {
           pk: `${username}#chat`,
           sk: data.oldSortKey,
         },
-        UpdateExpression: 'SET #attrName = :sk',
-        ExpressionAttributeNames: {
-          '#attrName': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':sk': data.newSortKey,
+        ConditionExpression: 'attribute_exists(pk) AND attribute_exists(sk)',
+        ReturnValues: 'NONE',
+      });
+
+      await ddbDocClient.send(deleteChatCommand);
+
+      //CREA EL CHAT PARA REMITENTE CON EL NUEVO SORTKEY
+      const createSenderCommand = new PutCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Item: {
+          pk: `${username}#chat`,
+          sk: data.newSortKey,
+          idChat: data.id,
         },
       });
 
-      await ddbDocClient.send(updateSenderCommand); */
+      await ddbDocClient.send(createSenderCommand);
 
       //ACTUALIZACION DEL SORTKEY DE CHAT PARA DESTINATARIO
-     /*  const updateSenderAddressee = new UpdateCommand({
+      //BORRA EL CHAT PARA EL DESTINATARIOS
+      const deleteAddresseeChatCommand = new DeleteCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Key: {
+          pk: `${data.to}#chat`,
+          sk: data.oldSortKey,
+        },
+        ConditionExpression: 'attribute_exists(pk) AND attribute_exists(sk)',
+        ReturnValues: 'NONE',
+      });
+
+      await ddbDocClient.send(deleteChatCommand);
+
+      //CREA EL CHAT PARA EL DESTINATARIO CON EL NUEVO SORTKEY
+      const createAddresseeCommand = new PutCommand({
+        TableName: process.env.CHAT_TABLE_NAME,
+        Item: {
+          pk: `${data.to}#chat`,
+          sk: data.newSortKey,
+          idChat: data.id,
+        },
+      });
+
+      await ddbDocClient.send(createSenderCommand);
+
+      /*  const updateSenderAddressee = new UpdateCommand({
         TableName: process.env.CHAT_TABLE_NAME,
         Key: {
           pk: `${data.to}#chat`,
