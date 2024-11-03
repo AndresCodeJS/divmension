@@ -118,23 +118,6 @@ export async function storeMessage(
       });
 
       await ddbDocClient.send(createSenderCommand);
-
-      /*  const updateSenderAddressee = new UpdateCommand({
-        TableName: process.env.CHAT_TABLE_NAME,
-        Key: {
-          pk: `${data.to}#chat`,
-          sk: data.oldSortKey,
-        },
-        UpdateExpression: 'SET #attrName = :sk',
-        ExpressionAttributeNames: {
-          '#attrName': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':sk': data.newSortKey,
-        },
-      });
-
-      await ddbDocClient.send(updateSenderAddressee); */
     }
 
     //REGISTRO DEL MENSAJE
