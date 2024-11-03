@@ -68,6 +68,12 @@ export async function storeMessage(
 
       await ddbDocClient.send(addresseeSenderCommand);
     } else {
+
+      console.log('se va a actualizar el ULID')
+
+      console.log('username:', username)
+      console.log(data)
+
       //BORRA EL CHAT PARA EL REMITENTE
       const deleteChatCommand = new DeleteCommand({
         TableName: process.env.CHAT_TABLE_NAME,
@@ -105,7 +111,7 @@ export async function storeMessage(
         ReturnValues: 'NONE',
       });
 
-      await ddbDocClient.send(deleteChatCommand);
+      await ddbDocClient.send(deleteAddresseeChatCommand);
 
       //CREA EL CHAT PARA EL DESTINATARIO CON EL NUEVO SORTKEY
       const createAddresseeCommand = new PutCommand({
@@ -117,7 +123,7 @@ export async function storeMessage(
         },
       });
 
-      await ddbDocClient.send(createSenderCommand);
+      await ddbDocClient.send(createAddresseeCommand);
     }
 
     //REGISTRO DEL MENSAJE
@@ -128,7 +134,7 @@ export async function storeMessage(
     const createMessageCommand = new PutCommand({
       TableName: process.env.CHAT_TABLE_NAME,
       Item: {
-        pk: `message${data.id}`,
+        pk: `message#${data.id}`,
         sk: messageId,
         sender: username,
         addressee: data.to,

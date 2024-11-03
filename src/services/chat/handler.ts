@@ -124,7 +124,7 @@ async function handler(event: WebSocketEvent): Promise<APIGatewayProxyResult> {
     switch (action) {
       case 'SEND_MESSAGE':
         await storeMessage(username,data, docClient)
-        await handleSendMessage(client, data, docClient);
+        await handleSendMessage(client, data, docClient, username);
         console.log('mensaje', data.message);
         break;
       case 'PING':

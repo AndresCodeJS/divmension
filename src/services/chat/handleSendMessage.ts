@@ -9,7 +9,8 @@ import { GetCommand } from '@aws-sdk/lib-dynamodb';
 export async function handleSendMessage(
   client: any,
   data: any,
-  ddbDocClient: DynamoDBClient
+  ddbDocClient: DynamoDBClient,
+  username: string
 ) {
   try {
     console.log('se buscara la conn del usuario: ', data.to);
@@ -36,7 +37,10 @@ export async function handleSendMessage(
         //SE ENVIA EL MENSAJE
         const params = {
           ConnectionId: connId,
-          Data: data.message,
+          Data: JSON.stringify({
+            info: data,
+            sender: username,
+          }),
         };
 
         const command = new PostToConnectionCommand(params);
