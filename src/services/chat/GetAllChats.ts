@@ -40,57 +40,98 @@ export async function getAllChats(
       let chats: IChat[] = [];
 
       if (getChats.Items.length) {
-
         let chatQueries = getChats.Items.map((chat) => {
-
-            let getChatsInfo = async () => {
-
-                //OBTIENE LOS PRIMEROS 15 MENSAJES DEL CHAT
-                const getMessagesCommand = new QueryCommand({
-                    TableName: process.env.CHAT_TABLE_NAME,
-                    KeyConditionExpression: 'pk = :pk',
-                    ExpressionAttributeValues: {
-                      ':pk': `message#${chat.idChat}`,
-                    },
-                    Limit: 15,
-                    ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos
-                    /*  ExclusiveStartKey: {
+          let getChatsInfo = async () => {
+            //OBTIENE LOS PRIMEROS 15 MENSAJES DEL CHAT
+            const getMessagesCommand = new QueryCommand({
+              TableName: process.env.CHAT_TABLE_NAME,
+              KeyConditionExpression: 'pk = :pk',
+              ExpressionAttributeValues: {
+                ':pk': `message#${chat.idChat}`,
+              },
+              Limit: 15,
+              ScanIndexForward: false, // para obtener de los registros mas nuevos a los mas viejos
+              /*  ExclusiveStartKey: {
                           pk: `${pkParam}#post`,
                           sk: skParam,
                         }, */
-                  });
+            });
 
-                  const getMessages = await ddbDocClient.send(getMessagesCommand);
+            const getMessages = await ddbDocClient.send(getMessagesCommand);
 
-                  if( getMessages.Items.length){
+            if (getMessages.Items.length) {
+              //BUSCAR LA URL DE LA FOTO DE PERFIL DEL OTRO USUARIO
 
-                        //BUSCAR LA URL DE LA FOTO DE PERFIL DEL OTRO USUARIO
+              let username = '';
 
+              //SI EL DESTINATARIO DEL MENSAJE ES IGUAL AL USUARIO LOGUEADO SE ASIGNA EL
+              //USERNAME DEL REMITENTE SINO SE ASIGNA EL USERNAME DEL DESTINATARIO
+              if (getMessages.Items[0].addressee == loggedUser) {
+                username = getMessages.Items[0].sender;
+              } else {
+                username = getMessages.Items[0].addressee;
+              }
 
-                        //CONSTRUIR LA ESTRUCTURA DE DATOS QUE SE DEVOLVERA
+              //SE OBTIENE LA URL DE LA FOTO DE PERFIL
+              const getPhotoCommand = new GetCommand({
+                TableName: process.env.TABLE_NAME,
+                Key: {
+                  pk: username,
+                  sk: 'photo',
+                },
+              });
 
+              const getPhoto = await ddbDocClient.send(getPhotoCommand);
 
-                  }else{
-                    return null
+              let photoUrl = '';
 
-                    //TODO TESTEAR CON UN CHAT SIN MENSAJES
-                  }
+              if (getPhoto.Item) {
+                photoUrl = getPhoto.Item.url;
+              }
 
+              //CONSTRUIR LA ESTRUCTURA DE DATOS QUE SE DEVOLVERA
+
+              let chatObj: IChat = {
+                newSortKey: chat.sk,
+                oldSortKey: '',
+                chatId: chat.idChat,
+                messages: getMessages.Items,
+                to: username,
+                photoUrl,
+              };
+
+              return chatObj;
+            } else {
+              return null;
+
+              //TODO TESTEAR CON UN CHAT SIN MENSAJES
             }
+          };
 
-            return  chatQueries()
-
-        })
+          return chatQueries();
+        });
 
         chats = await Promise.all(chatQueries);
-
       }
 
-    } catch (error) {}
-  }
+      let chatList: IChat[] = [];
 
-  return {
-    statusCode: 400,
-    body: JSON.stringify({}),
-  };
+      //DEVUELVE SOLO LOS CHATS QUE CONTIENE MENSAJES
+      chats.forEach((chat) => {
+        if (chat.chatId) {
+          chatList.push(chat);
+        }
+      });
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ chats: chatList }),
+      };
+    } catch (error) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error }),
+      };
+    }
+  }
 }
