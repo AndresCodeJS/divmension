@@ -130,10 +130,14 @@ export class ApiStack extends Stack {
         //RUTA DE CHAT
         const chatResource = api.root.addResource('chat', optionsWithCors)
 
-
+        //OBTENER LOS DETALLES DE UN CHAT CUANDO SE PULSA EL BOTON MENSAJE DESDE EL PERFIL
         const detailsResource = chatResource.addResource('details', optionsWithCors)
         const addresseeResource = detailsResource.addResource('{addressee}', optionsWithCors)
         addresseeResource.addMethod('GET', props.usersLambdaIntegration)
+
+        //OBTENER TODOS LOS CHATS AL INICIAR SESSION O REFRESCAR LA PAGINA
+        const allChatsResource = chatResource.addResource('all', optionsWithCors)
+        allChatsResource.addMethod('GET', props.usersLambdaIntegration)
 
     }
 

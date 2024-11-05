@@ -86,6 +86,11 @@ async function handler(
           response = await getChatDetails(event, docClient);
         }
 
+        if (event.path == ("/chat/all")) {
+          //OBTIENE TODOS LOS CHATS DE UN USUARIO
+          /* response = await getChatDetails(event, docClient); */
+        }
+
         break;
 
       case "POST":
